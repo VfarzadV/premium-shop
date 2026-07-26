@@ -4,7 +4,7 @@ import { MapPin, Phone, Globe, Send, PhoneCall } from 'lucide-react';
 
 export default function Footer() {
     return (
-        <footer className="w-full bg-bg-sec border-t border-stroke mt-20 pt-12">
+        <footer className="w-full bg-bg-sec border-t border-stroke pt-12">
             <div className="w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10">
                 <div className="flex items-center justify-center lg:justify-start">
                     <div className="bg-bg-main p-6 rounded-2xl border border-stroke shadow-sm flex items-center justify-center gap-6 w-full max-w-xs">

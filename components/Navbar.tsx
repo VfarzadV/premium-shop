@@ -3,10 +3,20 @@
 import Link from 'next/link';
 import { Search, ShoppingBasket, User, Globe, LayoutGrid, X } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useUserStore } from '@/store/useUserStore';
 
 export default function Navbar() {
     const [query, setQuery] = useState('');
+    const { phone, displayName } = useUserStore();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsMounted(true);
+        }, 0);
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
         <header className="bg-bg-sec  py-5  border-b border-stroke">
@@ -52,10 +62,22 @@ export default function Navbar() {
                         <button className="flex items-center justify-center w-11 h-11 hover:bg-secondary transition-colors">
                             <ShoppingBasket className="w-7 h-7" />
                         </button>
-                        <button className="flex items-center  border border-stroke shadow-lg gap-2 px-4 h-11 font-semibold rounded-lg bg-secondary text-text-main  hover:opacity-90 transition-opacity">
-                            <User className="w-5 h-5" />
-                            <span className="">حساب کاربری</span>
-                        </button>
+                        {isMounted ? (
+                            <Link 
+                                href={phone ? "/profile" : "/login"} 
+                                className="flex items-center border border-stroke shadow-lg gap-2 px-4 h-11 font-semibold rounded-lg bg-secondary text-text-main hover:opacity-90 transition-opacity"
+                            >
+                                <User className="w-5 h-5" />
+                                <span className="truncate max-w-30">
+                                    {phone ? (displayName || 'حساب کاربری') : 'ورود | ثبت نام'}
+                                </span>
+                            </Link>
+                        ) : (
+                            <div className="flex items-center border border-stroke shadow-lg gap-2 px-4 h-11 font-semibold rounded-lg bg-secondary text-text-main opacity-50">
+                                <User className="w-5 h-5" />
+                                <span>...</span>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="flex justify-between items-center bg-secondary px-4 py-2.5 rounded-xl">

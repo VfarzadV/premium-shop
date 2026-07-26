@@ -10,7 +10,7 @@ const posts = [
 
 export default function BlogSection() {
     return (
-        <section className="w-full mt-12">
+        <section className="w-full mt-12 mb-20">
             <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center gap-2 text-text-main">
                     <FileText className="w-6 h-6 text-text-sec" />
