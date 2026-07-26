@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { User, ShoppingBag, Heart, MapPin, LogOut, Shield, KeyRound, SearchX } from 'lucide-react';
+import { User, ShoppingBag, Heart, MapPin, LogOut, Shield, KeyRound } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/useUserStore';
 import Swal from 'sweetalert2';
@@ -59,12 +59,8 @@ export default function ProfilePage() {
 
     return (
         <main className="w-[90%] lg:w-[85%] mx-auto py-8 md:py-12 min-h-screen flex flex-col gap-8">
-
-            {/* ================= هدر پنل کاربری ================= */}
             <div className="bg-white rounded-3xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between border border-stroke shadow-sm relative overflow-hidden group">
-                {/* افکت پس‌زمینه تزئینی */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/30 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2 transition-transform group-hover:scale-150 duration-700"></div>
-
                 <div className="flex items-center gap-4 text-text-main z-10">
                     <div className="w-16 h-16 bg-secondary/30 text-primary rounded-2xl flex items-center justify-center border border-secondary/50 shadow-inner">
                         <User className="w-8 h-8" />
@@ -78,7 +74,6 @@ export default function ProfilePage() {
                         )}
                     </div>
                 </div>
-
                 <button
                     onClick={handleLogout}
                     className="mt-6 sm:mt-0 flex items-center gap-2 bg-bg-sec border border-stroke px-6 py-3 rounded-xl text-text-sec hover:text-white hover:bg-red-500 hover:border-red-500 hover:shadow-lg hover:shadow-red-500/20 active:scale-95 transition-all z-10"
@@ -87,8 +82,6 @@ export default function ProfilePage() {
                     <LogOut className="w-5 h-5" />
                 </button>
             </div>
-
-            {/* ================= منوی تب‌ها ================= */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 {tabs.map((tab) => {
                     const Icon = tab.icon;
@@ -110,52 +103,39 @@ export default function ProfilePage() {
                     );
                 })}
             </div>
-
-            {/* ================= محتوای تب‌ها ================= */}
-            <div className="bg-white border border-stroke rounded-3xl p-6 md:p-10 shadow-sm min-h-[400px]">
-
-                {/* ---------- تب اطلاعات حساب ---------- */}
+            <div className="bg-white border border-stroke rounded-3xl p-6 md:p-10 shadow-sm min-h-100">
                 {activeTab === 'account' && (
                     <form className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col gap-10" onSubmit={handleSaveProfile}>
-
-                        {/* اطلاعات فردی */}
                         <div>
                             <div className="flex items-center gap-2 mb-6 border-b border-stroke pb-4">
                                 <User className="w-5 h-5 text-primary" />
                                 <h2 className="text-lg font-black text-text-main">اطلاعات هویتی</h2>
                             </div>
-
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">نام <span className="text-red-500">*</span></label>
                                     <input name="firstName" value={formData.firstName} onChange={handleChange} type="text" className="w-full bg-bg-sec border border-stroke rounded-2xl py-3.5 px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="نام خود را وارد کنید" />
                                 </div>
-
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">نام خانوادگی <span className="text-red-500">*</span></label>
                                     <input name="lastName" value={formData.lastName} onChange={handleChange} type="text" className="w-full bg-bg-sec border border-stroke rounded-2xl py-3.5 px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="نام خانوادگی خود را وارد کنید" />
                                 </div>
-
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">نام نمایشی <span className="text-red-500">*</span></label>
                                     <input name="displayName" value={formData.displayName} onChange={handleChange} type="text" className="w-full bg-bg-sec border border-stroke rounded-2xl py-3.5 px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="مثلاً: فرهاد وطن‌دوست" />
                                     <span className="text-xs text-text-sec/70 mt-1 pr-2">به این صورت اسم شما در بخش نظرات دیده خواهد شد.</span>
                                 </div>
-
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">آدرس ایمیل</label>
                                     <input name="email" value={formData.email} onChange={handleChange} type="email" dir="ltr" className="w-full bg-bg-sec border border-stroke rounded-2xl py-3.5 px-5 text-left focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="example@email.com" />
                                 </div>
                             </div>
                         </div>
-
-                        {/* تنظیمات رمز عبور */}
                         <div className="bg-bg-sec/50 border border-stroke rounded-3xl p-6 md:p-8">
                             <div className="flex items-center gap-2 mb-6 border-b border-stroke pb-4">
                                 <Shield className="w-5 h-5 text-primary" />
                                 <h3 className="text-lg font-black text-text-main">تنظیمات رمز عبور</h3>
                             </div>
-
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">رمز عبور قبلی</label>
@@ -180,8 +160,6 @@ export default function ProfilePage() {
                                 </div>
                             </div>
                         </div>
-
-                        {/* دکمه ذخیره */}
                         <div className="flex justify-end pt-2">
                             <button type="submit" className="w-full md:w-auto bg-primary text-white font-black py-4 px-12 rounded-2xl hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/20 active:scale-95 transition-all duration-300">
                                 ذخیره اطلاعات حساب
@@ -189,10 +167,8 @@ export default function ProfilePage() {
                         </div>
                     </form>
                 )}
-
-                {/* ---------- وضعیت‌های خالی (Empty States) برای سایر تب‌ها ---------- */}
                 {activeTab === 'orders' && (
-                    <div className="animate-in zoom-in-95 duration-500 h-full min-h-[300px] flex flex-col items-center justify-center text-center gap-4">
+                    <div className="animate-in zoom-in-95 duration-500 h-full min-h-75 flex flex-col items-center justify-center text-center gap-4">
                         <div className="w-24 h-24 bg-secondary/30 rounded-full flex items-center justify-center mb-2">
                             <ShoppingBag className="w-10 h-10 text-primary opacity-50" />
                         </div>
@@ -200,9 +176,8 @@ export default function ProfilePage() {
                         <p className="text-text-sec">شما هنوز هیچ سفارشی در فروشگاه ثبت نکرده‌اید.</p>
                     </div>
                 )}
-
                 {activeTab === 'wishlist' && (
-                    <div className="animate-in zoom-in-95 duration-500 h-full min-h-[300px] flex flex-col items-center justify-center text-center gap-4">
+                    <div className="animate-in zoom-in-95 duration-500 h-full min-h-75 flex flex-col items-center justify-center text-center gap-4">
                         <div className="w-24 h-24 bg-secondary/30 rounded-full flex items-center justify-center mb-2">
                             <Heart className="w-10 h-10 text-primary opacity-50" />
                         </div>
@@ -210,9 +185,8 @@ export default function ProfilePage() {
                         <p className="text-text-sec">محصولاتی که دوست دارید را به این لیست اضافه کنید.</p>
                     </div>
                 )}
-
                 {activeTab === 'addresses' && (
-                    <div className="animate-in zoom-in-95 duration-500 h-full min-h-[300px] flex flex-col items-center justify-center text-center gap-4">
+                    <div className="animate-in zoom-in-95 duration-500 h-full min-h-75 flex flex-col items-center justify-center text-center gap-4">
                         <div className="w-24 h-24 bg-secondary/30 rounded-full flex items-center justify-center mb-2">
                             <MapPin className="w-10 h-10 text-primary opacity-50" />
                         </div>
@@ -220,7 +194,6 @@ export default function ProfilePage() {
                         <p className="text-text-sec">برای ارسال سریع‌تر سفارشات، آدرس خود را ثبت کنید.</p>
                     </div>
                 )}
-
             </div>
         </main>
     );
