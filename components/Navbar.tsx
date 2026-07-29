@@ -5,11 +5,22 @@ import { Search, ShoppingBasket, User, Globe, LayoutGrid, X } from 'lucide-react
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useUserStore } from '@/store/useUserStore';
+import { useRouter } from 'next/navigation';
+import { useCartStore } from '@/store/useCartStore';
 
 export default function Navbar() {
     const [query, setQuery] = useState('');
     const { phone, displayName } = useUserStore();
     const [isMounted, setIsMounted] = useState(false);
+    const { items } = useCartStore();
+    const router = useRouter();
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (query.trim()) {
+            router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+        }
+    };
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -21,7 +32,6 @@ export default function Navbar() {
     return (
         <header className="bg-bg-sec  py-5  border-b border-stroke">
             <div className="w-[85%] mx-auto flex flex-col gap-5">
-
                 <div className="flex justify-between items-center">
                     <Link href="/" className=" flex items-center justify-center rounded-lg hover:border-primary transition-colors">
                         <Image
@@ -34,7 +44,7 @@ export default function Navbar() {
                     </Link>
                     <div className="relative w-full max-w-lg hidden md:block">
                         <form
-                            onSubmit={(e) => e.preventDefault()}
+                            onSubmit={handleSearch}
                             className="relative"
                             aria-label="جستجو در محصولات"
                         >
@@ -59,12 +69,17 @@ export default function Navbar() {
                         </form>
                     </div>
                     <div className="flex items-center gap-3">
-                        <button className="flex items-center justify-center w-11 h-11 hover:bg-secondary transition-colors">
-                            <ShoppingBasket className="w-7 h-7" />
-                        </button>
+                        <Link href="/cart" className="relative flex items-center justify-center w-11 h-11 hover:bg-secondary rounded-lg transition-colors">
+                            <ShoppingBasket className="w-7 h-7 text-text-main" />
+                            {isMounted && items.length > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm animate-in zoom-in">
+                                    {items.reduce((total, item) => total + item.quantity, 0)}
+                                </span>
+                            )}
+                        </Link>
                         {isMounted ? (
-                            <Link 
-                                href={phone ? "/profile" : "/login"} 
+                            <Link
+                                href={phone ? "/profile" : "/login"}
                                 className="flex items-center border border-stroke shadow-lg gap-2 px-4 h-11 font-semibold rounded-lg bg-secondary text-text-main hover:opacity-90 transition-opacity"
                             >
                                 <User className="w-5 h-5" />

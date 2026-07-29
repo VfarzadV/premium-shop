@@ -12,10 +12,9 @@ export default function InstagramBanner() {
           برای دسترسی به محتواهای بیشتر و تخفیف‌های روزانه، پیج ما را دنبال کنید
         </p>
       </div>
-      
-      <Link 
-        href="https://instagram.com" 
-        target="_blank" 
+      <Link
+        href="https://instagram.com"
+        target="_blank"
         className="flex items-center gap-2 bg-white border border-stroke px-6 py-3 rounded-xl font-bold text-text-main shadow-sm hover:shadow-md hover:text-primary transition-all shrink-0"
       >
         <Globe className="w-6 h-6" />

@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface UserState {
   phone: string;
@@ -7,7 +7,6 @@ interface UserState {
   lastName: string;
   displayName: string;
   email: string;
-  
   login: (phone: string) => void;
   updateProfile: (data: Partial<UserState>) => void;
   logout: () => void;
@@ -16,18 +15,24 @@ interface UserState {
 export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      phone: '',
-      firstName: '',
-      lastName: '',
-      displayName: '',
-      email: '',
-      
+      phone: "",
+      firstName: "",
+      lastName: "",
+      displayName: "",
+      email: "",
       login: (phone) => set({ phone }),
       updateProfile: (data) => set((state) => ({ ...state, ...data })),
-      logout: () => set({ phone: '', firstName: '', lastName: '', displayName: '', email: '' }),
+      logout: () =>
+        set({
+          phone: "",
+          firstName: "",
+          lastName: "",
+          displayName: "",
+          email: "",
+        }),
     }),
     {
-      name: 'user-storage', 
-    }
-  )
+      name: "user-storage",
+    },
+  ),
 );
