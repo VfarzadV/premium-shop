@@ -67,7 +67,7 @@ export const useCartStore = create<CartState>()(
       clearCart: () => set({ items: [] }),
       getTotalPrice: () => {
         return get().items.reduce((total, item) => {
-          const fakeExchangeRate = 50000;
+          const fakeExchangeRate = 200000;
           const tomanPrice = item.price * fakeExchangeRate;
           return total + tomanPrice * item.quantity;
         }, 0);

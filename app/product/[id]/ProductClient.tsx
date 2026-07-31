@@ -11,6 +11,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { useCartStore } from '@/store/useCartStore';
+import Swal from 'sweetalert2';
 
 const mockColors = [
     { id: 'black', hex: '#000000', name: 'مشکی' },
@@ -44,9 +46,30 @@ export default function ProductClient({ product, similarProducts }: { product: P
     const [activeImage, setActiveImage] = useState(product.images[0] || product.thumbnail);
     const [selectedColor, setSelectedColor] = useState(mockColors[0].id);
     const [activeTab, setActiveTab] = useState('description');
-    const fakeExchangeRate = 50000;
+    const fakeExchangeRate = 200000;
     const tomanPrice = product.price * fakeExchangeRate;
     const oldTomanPrice = Math.round(tomanPrice / (1 - product.discountPercentage / 100));
+    const addToCart = useCartStore((state) => state.addToCart);
+
+    const handleAddToCart = (e: React.MouseEvent, item: Product) => {
+        e.preventDefault();
+        e.stopPropagation();
+        addToCart(item);
+        Swal.fire({
+            title: 'اضافه شد!',
+            text: `«${item.title}» به سبد خرید شما اضافه شد.`,
+            icon: 'success',
+            toast: true,
+            position: 'bottom-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'font-sans rounded-xl',
+                title: 'text-sm font-bold',
+            }
+        });
+    };
 
     const specs = [
         { key: 'برند', value: product.brand || 'متفرقه' },
@@ -168,7 +191,10 @@ export default function ProductClient({ product, similarProducts }: { product: P
                             <Info className="w-4 h-4 shrink-0 mt-0.5" />
                             <span>{product.shippingInformation || 'ارسال در سریع‌ترین زمان ممکن'}</span>
                         </div>
-                        <button className="w-full bg-primary text-white font-black py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 active:scale-95">
+                        <button
+                            onClick={(e) => handleAddToCart(e, product)}
+                            className="w-full bg-primary text-white font-black py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 active:scale-95"
+                        >
                             <ShoppingBasket className="w-5 h-5" />
                             افزودن به سبد خرید
                         </button>
@@ -273,7 +299,7 @@ export default function ProductClient({ product, similarProducts }: { product: P
                         className="w-full pb-4"
                     >
                         {similarProducts.map((prod) => {
-                            const fakeExchangeRate = 50000;
+                            const fakeExchangeRate = 200000;
                             const tomanPrice = prod.price * fakeExchangeRate;
                             return (
                                 <SwiperSlide key={prod.id} className="w-55! md:w-60!">
@@ -285,7 +311,10 @@ export default function ProductClient({ product, similarProducts }: { product: P
                                             <h3 className="font-bold text-text-main text-sm text-center line-clamp-1">{prod.title}</h3>
                                         </Link>
                                         <div className="mt-4 flex items-center justify-between">
-                                            <button className="bg-primary/10 text-primary p-2 rounded-lg hover:bg-primary hover:text-white transition-colors">
+                                            <button
+                                                onClick={(e) => handleAddToCart(e, prod)}
+                                                className="bg-primary/10 text-primary p-2 rounded-lg hover:bg-primary hover:text-white transition-colors z-10 relative"
+                                            >
                                                 <ShoppingBasket className="w-5 h-5" />
                                             </button>
                                             <span className="font-black text-text-main text-sm">

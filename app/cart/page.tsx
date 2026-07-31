@@ -53,7 +53,7 @@ export default function CartPage() {
             </main>
         );
     }
-    const fakeExchangeRate = 50000;
+    const fakeExchangeRate = 200000;
 
     return (
         <main className="w-[90%] lg:w-[85%] mx-auto py-8 md:py-12 min-h-screen">

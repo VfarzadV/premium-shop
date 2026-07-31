@@ -39,7 +39,7 @@ export default function ProductCard({ product }: { product: Product }) {
         });
     };
 
-    const fakeExchangeRate = 50000;
+    const fakeExchangeRate = 200000;
     const tomanPrice = product.price * fakeExchangeRate;
     const oldTomanPrice = Math.round(tomanPrice / (1 - product.discountPercentage / 100));
     const categoryNames: Record<string, string> = {

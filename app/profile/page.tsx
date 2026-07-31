@@ -122,7 +122,7 @@ export default function ProfilePage() {
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">نام نمایشی <span className="text-red-500">*</span></label>
-                                    <input name="displayName" value={formData.displayName} onChange={handleChange} type="text" className="w-full bg-bg-sec border border-stroke rounded-2xl py-3.5 px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="مثلاً: فرهاد وطن‌دوست" />
+                                    <input name="displayName" value={formData.displayName} onChange={handleChange} type="text" className="w-full bg-bg-sec border border-stroke rounded-2xl py-3.5 px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="مثلاً: فرزاد وطن‌دوست" />
                                     <span className="text-xs text-text-sec/70 mt-1 pr-2">به این صورت اسم شما در بخش نظرات دیده خواهد شد.</span>
                                 </div>
                                 <div className="flex flex-col gap-2">
