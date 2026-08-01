@@ -145,10 +145,10 @@ export default function CartPage() {
                                 <span className="text-xs text-text-sec font-bold">تومان</span>
                             </div>
                         </div>
-                        <button className="w-full bg-primary text-white font-black py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 active:scale-95 mt-2">
-                            ثبت سفارش و پرداخت
+                        <Link href="/checkout" className="w-full bg-primary text-white font-black py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 active:scale-95 mt-2">
+                            تکمیل خرید و تسویه‌حساب
                             <ArrowLeft className="w-5 h-5" />
-                        </button>
+                        </Link>
                         <p className="text-xs text-text-sec text-center leading-relaxed">
                             با ثبت سفارش، قوانین و مقررات فروشگاه را می‌پذیرید.
                         </p>

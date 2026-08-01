@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from 'react';
-import { User, ShoppingBag, Heart, MapPin, LogOut, Shield, KeyRound } from 'lucide-react';
+import { User, ShoppingBag, Heart, MapPin, LogOut, Shield, KeyRound, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/useUserStore';
 import Swal from 'sweetalert2';
+import { useOrderStore } from '@/store/useOrderStore';
+import { useWishlistStore } from '@/store/useWishlistStore';
+import ProductCard from '@/components/ProductCard';
 
 const tabs = [
     { id: 'account', title: 'اطلاعات حساب', icon: User },
@@ -17,6 +20,8 @@ export default function ProfilePage() {
     const [activeTab, setActiveTab] = useState('account');
     const router = useRouter();
     const { phone, firstName, lastName, displayName, email, updateProfile, logout } = useUserStore();
+    const { orders, removeOrder } = useOrderStore();
+    const { items: wishlistItems } = useWishlistStore();
 
     const [formData, setFormData] = useState({
         firstName: firstName || '',
@@ -48,6 +53,42 @@ export default function ProfilePage() {
         }).then((result) => {
             if (result.isConfirmed) {
                 router.push('/');
+            }
+        });
+    };
+
+    const handleDeleteOrder = (id: string) => {
+        Swal.fire({
+            title: 'حذف از تاریخچه',
+            text: 'آیا از حذف این سفارش از تاریخچه خود مطمئن هستید؟',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#E9E9E8',
+            confirmButtonText: 'بله، حذف کن',
+            cancelButtonText: 'انصراف',
+            customClass: {
+                popup: 'rounded-3xl font-sans',
+                title: 'font-black text-text-main',
+                htmlContainer: 'text-text-sec text-sm mt-2',
+                confirmButton: 'font-bold rounded-xl px-6 py-3',
+                cancelButton: 'font-bold rounded-xl px-6 py-3 text-text-main hover:bg-stroke/50 transition-colors',
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                removeOrder(id);
+                Swal.fire({
+                    title: 'حذف شد!',
+                    text: 'سفارش با موفقیت از تاریخچه شما پاک شد.',
+                    icon: 'success',
+                    confirmButtonText: 'باشه',
+                    confirmButtonColor: '#6E543D',
+                    customClass: {
+                        popup: 'rounded-3xl font-sans',
+                        title: 'font-black text-text-main',
+                        confirmButton: 'font-bold rounded-xl px-8 py-3',
+                    }
+                });
             }
         });
     };
@@ -168,21 +209,74 @@ export default function ProfilePage() {
                     </form>
                 )}
                 {activeTab === 'orders' && (
-                    <div className="animate-in zoom-in-95 duration-500 h-full min-h-75 flex flex-col items-center justify-center text-center gap-4">
-                        <div className="w-24 h-24 bg-secondary/30 rounded-full flex items-center justify-center mb-2">
-                            <ShoppingBag className="w-10 h-10 text-primary opacity-50" />
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col gap-6">
+                        <div className="flex items-center gap-2 mb-2 border-b border-stroke pb-4">
+                            <ShoppingBag className="w-5 h-5 text-primary" />
+                            <h2 className="text-lg font-black text-text-main">تاریخچه سفارشات</h2>
                         </div>
-                        <h3 className="text-xl font-black text-text-main">سفارشی یافت نشد!</h3>
-                        <p className="text-text-sec">شما هنوز هیچ سفارشی در فروشگاه ثبت نکرده‌اید.</p>
+                        {orders.length > 0 ? (
+                            <div className="flex flex-col gap-4">
+                                {orders.map((order) => (
+                                    <div key={order.id} className="bg-bg-sec/50 border border-stroke rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-5 hover:border-primary/40 transition-colors">
+                                        <div className="flex flex-col gap-2">
+                                            <div className="flex items-center gap-3">
+                                                <span className="font-black text-text-main tracking-wider dir-ltr text-left">{order.id}</span>
+                                                <span className="bg-secondary/30 text-primary text-xs font-bold px-2.5 py-1 rounded-lg">
+                                                    {order.status}
+                                                </span>
+                                            </div>
+                                            <span className="text-sm text-text-sec font-medium">
+                                                ثبت شده در {order.date} • {order.items.reduce((acc, item) => acc + item.quantity, 0)} کالا
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center justify-between md:flex-col md:items-end gap-2 border-t border-stroke pt-4 md:border-none md:pt-0">
+                                            <div className="flex items-center gap-1">
+                                                <span className="font-black text-text-main text-lg">{order.totalPrice.toLocaleString('fa-IR')}</span>
+                                                <span className="text-xs text-text-sec">تومان</span>
+                                            </div>
+                                            <button
+                                                onClick={() => handleDeleteOrder(order.id)}
+                                                className="flex items-center gap-1.5 text-sm text-red-500 font-bold hover:bg-red-50 px-3 py-2 rounded-xl transition-colors active:scale-95"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                                حذف تاریخچه
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="h-full min-h-[40vh] flex flex-col items-center justify-center text-center gap-4">
+                                <div className="w-24 h-24 bg-secondary/30 rounded-full flex items-center justify-center mb-2">
+                                    <ShoppingBag className="w-10 h-10 text-primary opacity-50" />
+                                </div>
+                                <h3 className="text-xl font-black text-text-main">سفارشی ثبت نشده است!</h3>
+                                <p className="text-text-sec">شما هنوز هیچ خریدی از فروشگاه نداشته‌اید.</p>
+                            </div>
+                        )}
                     </div>
                 )}
                 {activeTab === 'wishlist' && (
-                    <div className="animate-in zoom-in-95 duration-500 h-full min-h-75 flex flex-col items-center justify-center text-center gap-4">
-                        <div className="w-24 h-24 bg-secondary/30 rounded-full flex items-center justify-center mb-2">
-                            <Heart className="w-10 h-10 text-primary opacity-50" />
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col gap-6">
+                        <div className="flex items-center gap-2 mb-2 border-b border-stroke pb-4">
+                            <Heart className="w-5 h-5 text-primary" />
+                            <h2 className="text-lg font-black text-text-main">لیست علاقه‌مندی‌ها</h2>
                         </div>
-                        <h3 className="text-xl font-black text-text-main">لیست علاقه‌مندی‌ها خالی است!</h3>
-                        <p className="text-text-sec">محصولاتی که دوست دارید را به این لیست اضافه کنید.</p>
+                        {wishlistItems.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+                                {wishlistItems.map((product) => (
+                                    <ProductCard key={product.id} product={product} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="h-full min-h-[40vh] flex flex-col items-center justify-center text-center gap-4">
+                                <div className="w-24 h-24 bg-secondary/30 rounded-full flex items-center justify-center mb-2">
+                                    <Heart className="w-10 h-10 text-primary opacity-50" />
+                                </div>
+                                <h3 className="text-xl font-black text-text-main">لیست علاقه‌مندی‌های شما خالی است!</h3>
+                                <p className="text-text-sec">محصولاتی که دوست دارید را با کلیک روی آیکون قلب به این لیست اضافه کنید.</p>
+                            </div>
+                        )}
                     </div>
                 )}
                 {activeTab === 'addresses' && (

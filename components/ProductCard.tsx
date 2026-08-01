@@ -1,9 +1,11 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingBasket, Star } from 'lucide-react';
+import { ShoppingBasket, Star, Heart } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
+import { useWishlistStore } from '@/store/useWishlistStore';
 import Swal from 'sweetalert2';
 
 export interface Product {
@@ -17,15 +19,27 @@ export interface Product {
 }
 
 export default function ProductCard({ product }: { product: Product }) {
+    const [isMounted, setIsMounted] = useState(false);
     const addToCart = useCartStore((state) => state.addToCart);
+    const { items: wishlistItems, toggleWishlist } = useWishlistStore();
+
+useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsMounted(true);
+        }, 0);
+        
+        return () => clearTimeout(timer);
+    }, []);
+
+    const isWished = isMounted ? wishlistItems.some(item => item.id === product.id) : false;
+
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-
         addToCart(product);
         Swal.fire({
             title: 'اضافه شد!',
-            text: `«${product.title}» به سبد خرید شما اضافه شد.`,
+            text: `«${product.title}» به سبد خرید اضافه شد.`,
             icon: 'success',
             toast: true,
             position: 'bottom-end',
@@ -39,11 +53,18 @@ export default function ProductCard({ product }: { product: Product }) {
         });
     };
 
+    const handleWishlist = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleWishlist(product);
+    };
+
     const fakeExchangeRate = 200000;
     const tomanPrice = product.price * fakeExchangeRate;
     const oldTomanPrice = Math.round(tomanPrice / (1 - product.discountPercentage / 100));
+
     const categoryNames: Record<string, string> = {
-        'smartphones': 'گوشی هوشمند',
+        'smartphones': 'گوشی موبایل',
         'laptops': 'لپ‌تاپ',
         'tablets': 'تبلت',
         'mobile-accessories': 'لوازم جانبی',
@@ -53,13 +74,13 @@ export default function ProductCard({ product }: { product: Product }) {
         'womens-shoes': 'کفش زنانه',
         'womens-bags': 'کیف زنانه',
         'furniture': 'مبلمان',
-        'home-decoration': 'دکوراسیون خانه',
+        'home-decoration': 'دکوراسیون',
         'kitchen-accessories': 'لوازم آشپزخانه',
-        'beauty': 'زیبایی',
+        'beauty': 'آرایشی',
         'fragrances': 'عطر و ادکلن',
         'skin-care': 'مراقبت پوست',
         'sports-accessories': 'لوازم ورزشی',
-        'groceries': 'خواربار'
+        'groceries': 'سوپرمارکت'
     };
 
     return (
@@ -68,6 +89,15 @@ export default function ProductCard({ product }: { product: Product }) {
                 <span className="absolute top-3 right-3 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full z-10 shadow-sm">
                     {Math.round(product.discountPercentage)}٪
                 </span>
+                <button
+                    onClick={handleWishlist}
+                    className={`absolute top-3 left-3 w-8 h-8 rounded-full flex items-center justify-center z-10 transition-all duration-300 shadow-sm active:scale-95 ${isWished
+                            ? 'bg-red-50 text-red-500 border border-red-200'
+                            : 'bg-white text-text-sec border border-stroke hover:text-red-500'
+                        }`}
+                >
+                    <Heart className={`w-4 h-4 ${isWished ? 'fill-current' : ''}`} />
+                </button>
                 <Link href={`/product/${product.id}`} className="relative w-4/5 h-4/5 block">
                     <Image
                         src={product.thumbnail}

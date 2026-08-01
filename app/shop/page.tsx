@@ -1,70 +1,217 @@
-import { SlidersHorizontal, ChevronDown } from 'lucide-react';
+"use client";
+
+import { useState, useEffect } from 'react';
 import ProductCard, { Product } from '@/components/ProductCard';
-import Pagination from '@/components/Pagination';
-import FilterSidebar from '@/components/FilterSidebar';
+import { SlidersHorizontal, X, ArrowDownWideNarrow, Loader2, Check } from 'lucide-react';
 
-interface DummyJsonResponse {
-    products: Product[];
-    total: number;
-    skip: number;
-    limit: number;
-}
-async function getAllProducts(limit: number, skip: number, sort: string): Promise<DummyJsonResponse> {
-    let url = `https://dummyjson.com/products?limit=${limit}&skip=${skip}`;
-    if (sort === 'price_asc') url += '&sortBy=price&order=asc';
-    else if (sort === 'price_desc') url += '&sortBy=price&order=desc';
-    else if (sort === 'rating_desc') url += '&sortBy=rating&order=desc';
+export default function ShopPage() {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [categories, setCategories] = useState<{slug: string, name: string}[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [activeCategory, setActiveCategory] = useState('all');
+    const [sortBy, setSortBy] = useState('default');
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-    const res = await fetch(url, {
-        next: { revalidate: 3600 }
-    });
-    return res.json();
-}
+    useEffect(() => {
+        const fetchData = async () => {
+            setIsLoading(true);
+            try {
+                const [productsRes, categoriesRes] = await Promise.all([
+                    fetch('https://dummyjson.com/products?limit=40'),
+                    fetch('https://dummyjson.com/products/categories')
+                ]);
+                const productsData = await productsRes.json();
+                const categoriesData = await categoriesRes.json();
+                
+                setProducts(productsData.products);
+                setCategories(categoriesData);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
 
-export default async function ShopPage({
-    searchParams
-}: {
-    searchParams: Promise<{ [key: string]: string | undefined }>
-}) {
-    const resolvedParams = await searchParams;
-    const currentPage = Number(resolvedParams.page) || 1;
-    const currentSort = resolvedParams.sort || '';
-    const limitPerPage = 12;
-    const skipCount = (currentPage - 1) * limitPerPage;
-    const data = await getAllProducts(limitPerPage, skipCount, currentSort);
-    const totalPages = Math.ceil(data.total / limitPerPage);
+    useEffect(() => {
+        if (isFilterOpen) document.body.style.overflow = 'hidden';
+        else document.body.style.overflow = 'unset';
+        return () => { document.body.style.overflow = 'unset'; };
+    }, [isFilterOpen]);
 
+    const filteredProducts = products
+        .filter(p => activeCategory === 'all' || p.category === activeCategory)
+        .sort((a, b) => {
+            if (sortBy === 'price-asc') return a.price - b.price;
+            if (sortBy === 'price-desc') return b.price - a.price;
+            if (sortBy === 'rating') return b.rating - a.rating;
+            return 0;
+        });
+    const sortOptions = [
+        { id: 'default', label: 'مرتب‌سازی پیش‌فرض' },
+        { id: 'price-asc', label: 'ارزان‌ترین' },
+        { id: 'price-desc', label: 'گران‌ترین' },
+        { id: 'rating', label: 'محبوب‌ترین' }
+    ];
     return (
-        <main className="w-[90%] lg:w-[85%] mx-auto py-8 md:py-12 min-h-screen">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8 bg-white p-6 rounded-3xl border border-stroke shadow-sm">
-                <div>
-                    <h1 className="text-2xl font-black text-text-main">فروشگاه</h1>
-                    <p className="text-sm text-text-sec mt-1">نمایش {skipCount + 1} تا {Math.min(skipCount + limitPerPage, data.total)} از {data.total} محصول</p>
-                </div>
-                <div className="flex items-center gap-3 w-full md:w-auto">
-                    <button className="flex items-center gap-2 bg-bg-sec border border-stroke px-4 py-2.5 rounded-xl text-sm font-bold text-text-main hover:bg-secondary/20 transition-colors md:hidden w-full justify-center">
-                        <SlidersHorizontal className="w-4 h-4" />
-                        فیلتر و مرتب‌سازی
-                    </button>
-                    <div className="hidden md:flex items-center gap-2 bg-bg-sec border border-stroke px-4 py-2.5 rounded-xl text-sm font-bold text-text-main cursor-pointer hover:border-primary transition-colors">
-                        مرتب‌سازی
-                        <ChevronDown className="w-4 h-4 text-text-sec" />
+        <main className="w-[90%] lg:w-[85%] mx-auto py-8">
+            <div className="flex items-center justify-between mb-8">
+                <h1 className="text-2xl font-black text-text-main">فروشگاه</h1>
+                
+                <button 
+                    onClick={() => setIsFilterOpen(true)}
+                    className="md:hidden flex items-center gap-2 bg-white border border-stroke px-4 py-2.5 rounded-xl hover:bg-bg-sec active:scale-95 transition-all text-sm font-bold text-text-main"
+                >
+                    <SlidersHorizontal className="w-4 h-4 text-primary" />
+                    فیلتر و مرتب‌سازی
+                </button>
+            </div>
+            <div className="flex flex-col md:flex-row gap-8">
+                <aside className="hidden md:flex flex-col w-72 shrink-0 gap-6 sticky top-28 h-fit">
+                    <div className="bg-white border border-stroke rounded-3xl p-6 shadow-sm">
+                        <div className="flex items-center gap-2 mb-4">
+                            <ArrowDownWideNarrow className="w-5 h-5 text-primary" />
+                            <h3 className="font-black text-text-main">مرتب‌سازی</h3>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            {sortOptions.map(option => (
+                                <button
+                                    key={option.id}
+                                    onClick={() => setSortBy(option.id)}
+                                    className={`flex items-center justify-between p-3 rounded-xl text-sm font-bold transition-colors ${sortBy === option.id ? 'bg-primary/10 text-primary' : 'hover:bg-bg-sec text-text-sec'}`}
+                                >
+                                    {option.label}
+                                    {sortBy === option.id && <Check className="w-4 h-4" />}
+                                </button>
+                            ))}
+                        </div>
                     </div>
+                    <div className="bg-white border border-stroke rounded-3xl p-6 shadow-sm">
+                        <div className="flex items-center gap-2 mb-4">
+                            <SlidersHorizontal className="w-5 h-5 text-primary" />
+                            <h3 className="font-black text-text-main">دسته‌بندی‌ها</h3>
+                        </div>
+                        <div className="flex flex-col gap-2 max-h-[40vh] overflow-y-auto scrollbar-none pr-2">
+                            <button
+                                onClick={() => setActiveCategory('all')}
+                                className={`text-right p-3 rounded-xl text-sm font-bold transition-colors ${activeCategory === 'all' ? 'bg-primary/10 text-primary' : 'hover:bg-bg-sec text-text-sec'}`}
+                            >
+                                همه محصولات
+                            </button>
+                            {categories.map(category => (
+                                <button
+                                    key={category.slug}
+                                    onClick={() => setActiveCategory(category.slug)}
+                                    className={`text-right p-3 rounded-xl text-sm font-bold transition-colors capitalize ${activeCategory === category.slug ? 'bg-primary/10 text-primary' : 'hover:bg-bg-sec text-text-sec'}`}
+                                >
+                                    {category.name.replace('-', ' ')}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </aside>
+                <div className="flex-1 min-w-0">
+                    {isLoading ? (
+                        <div className="w-full h-[50vh] flex flex-col items-center justify-center gap-4 text-primary">
+                            <Loader2 className="w-10 h-10 animate-spin" />
+                            <span className="font-bold text-text-main">در حال بارگذاری محصولات...</span>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                                {filteredProducts.map(product => (
+                                    <ProductCard key={product.id} product={product} />
+                                ))}
+                            </div>
+                            
+                            {filteredProducts.length === 0 && (
+                                <div className="w-full bg-white border border-stroke rounded-3xl p-12 text-center flex flex-col items-center gap-4">
+                                    <div className="w-20 h-20 bg-bg-sec rounded-full flex items-center justify-center">
+                                        <X className="w-10 h-10 text-text-sec" />
+                                    </div>
+                                    <h3 className="text-xl font-black text-text-main">محصولی یافت نشد!</h3>
+                                    <p className="text-text-sec font-medium">لطفاً فیلترهای دیگری را امتحان کنید.</p>
+                                    <button 
+                                        onClick={() => {setActiveCategory('all'); setSortBy('default');}}
+                                        className="mt-4 bg-primary text-white font-bold px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors"
+                                    >
+                                        حذف فیلترها
+                                    </button>
+                                </div>
+                            )}
+                        </>
+                    )}
                 </div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-8">
-                <aside className="hidden lg:flex flex-col gap-6 w-1/4 shrink-0">
-                    <FilterSidebar />
-                </aside>
-                <div className="w-full lg:w-3/4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
-                        {data.products.map((product) => (
-                            <ProductCard key={product.id} product={product} />
-                        ))}
+            {isFilterOpen && (
+                <div 
+                    className="fixed inset-0 bg-black/60 z-50 md:hidden backdrop-blur-sm transition-opacity"
+                    onClick={() => setIsFilterOpen(false)}
+                ></div>
+            )}
+            <div className={`fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl transform transition-transform duration-300 ease-in-out flex flex-col max-h-[85vh] md:hidden shadow-[0_-10px_40px_rgba(0,0,0,0.1)] ${isFilterOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+                
+                <div className="flex items-center justify-between p-6 border-b border-stroke">
+                    <span className="font-black text-lg text-text-main">فیلتر و مرتب‌سازی</span>
+                    <button 
+                        onClick={() => setIsFilterOpen(false)}
+                        className="p-2 bg-bg-sec text-text-main hover:bg-red-50 hover:text-red-500 rounded-xl transition-colors"
+                    >
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+                <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-8 scrollbar-none">
+                    
+                    <div className="flex flex-col gap-4">
+                        <div className="flex items-center gap-2">
+                            <ArrowDownWideNarrow className="w-5 h-5 text-primary" />
+                            <h3 className="font-black text-text-main">مرتب‌سازی بر اساس</h3>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            {sortOptions.map(option => (
+                                <button
+                                    key={option.id}
+                                    onClick={() => setSortBy(option.id)}
+                                    className={`flex items-center justify-center p-3 rounded-xl text-xs font-bold transition-all border ${sortBy === option.id ? 'bg-primary border-primary text-white shadow-md' : 'bg-white border-stroke text-text-sec hover:border-primary/50'}`}
+                                >
+                                    {option.label}
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                    <div className="mt-8">
-                        <Pagination pageCount={totalPages} />
+                    <div className="flex flex-col gap-4">
+                        <div className="flex items-center gap-2">
+                            <SlidersHorizontal className="w-5 h-5 text-primary" />
+                            <h3 className="font-black text-text-main">دسته‌بندی‌ها</h3>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            <button
+                                onClick={() => setActiveCategory('all')}
+                                className={`px-4 py-2.5 rounded-full text-xs font-bold transition-all border ${activeCategory === 'all' ? 'bg-primary text-white border-primary shadow-md' : 'bg-white border-stroke text-text-sec hover:bg-bg-sec'}`}
+                            >
+                                همه محصولات
+                            </button>
+                            {categories.map(category => (
+                                <button
+                                    key={category.slug}
+                                    onClick={() => setActiveCategory(category.slug)}
+                                    className={`px-4 py-2.5 rounded-full text-xs font-bold transition-all border capitalize ${activeCategory === category.slug ? 'bg-primary text-white border-primary shadow-md' : 'bg-white border-stroke text-text-sec hover:bg-bg-sec'}`}
+                                >
+                                    {category.name.replace('-', ' ')}
+                                </button>
+                            ))}
+                        </div>
                     </div>
+                </div>
+                <div className="p-6 border-t border-stroke bg-white shadow-[0_-10px_30px_rgba(0,0,0,0.03)]">
+                    <button 
+                        onClick={() => setIsFilterOpen(false)}
+                        className="w-full bg-primary text-white font-black py-4 rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 active:scale-95 flex items-center justify-center gap-2"
+                    >
+                        اعمال فیلترها و مشاهده
+                        <span className="bg-white/20 px-2 py-0.5 rounded-md text-sm">{filteredProducts.length}</span>
+                    </button>
                 </div>
             </div>
         </main>
