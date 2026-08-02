@@ -4,7 +4,7 @@ import { MapPin, Phone, Send, PhoneCall, Mail, ChevronLeft, Gem, Heart, Globe } 
 
 export default function Footer() {
     return (
-        <footer className="w-full bg-white border-t border-stroke pt-16 relative overflow-hidden">
+        <footer className="w-full bg-bg-sec border-t border-stroke pt-16 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-125 h-125 bg-secondary/10 rounded-full blur-[100px] -z-10 translate-x-1/3 -translate-y-1/3"></div>
             <div className="w-[90%] lg:w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12">
                 <div className="lg:col-span-4 flex flex-col gap-6">

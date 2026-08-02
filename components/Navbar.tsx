@@ -7,6 +7,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { ShoppingBasket, Search, Menu, X, User, LogIn, Gem, Trash2, Plus, Minus, ArrowLeft, Loader2 } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import { useUserStore } from '@/store/useUserStore';
+import ThemeToggle from './ThemeToggle';
 
 interface SearchProduct {
     id: number;
@@ -21,13 +22,17 @@ export default function Navbar() {
     const [searchResults, setSearchResults] = useState<SearchProduct[]>([]);
     const [isSearching, setIsSearching] = useState(false);
     const [showResults, setShowResults] = useState(false);
+
     const [isMounted, setIsMounted] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
+
     const router = useRouter();
     const pathname = usePathname();
+
     const searchRef = useRef<HTMLFormElement>(null);
     const mobileSearchRef = useRef<HTMLFormElement>(null);
+
     const { items, increaseQuantity, decreaseQuantity, getTotalPrice } = useCartStore();
     const { phone, firstName, displayName } = useUserStore();
     const nameToShow = displayName || firstName || '';
@@ -65,6 +70,7 @@ export default function Navbar() {
         }, 500);
         return () => clearTimeout(timer);
     }, [query]);
+
     useEffect(() => {
         const timer = setTimeout(() => {
             if (debouncedQuery.trim().length >= 2) {
@@ -82,6 +88,7 @@ export default function Navbar() {
                 setShowResults(false);
             }
         }, 0);
+
         return () => clearTimeout(timer);
     }, [debouncedQuery]);
 
@@ -108,8 +115,9 @@ export default function Navbar() {
 
     const renderSearchResults = () => {
         if (!showResults || query.trim().length < 2) return null;
+
         return (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-stroke rounded-2xl shadow-xl overflow-hidden z-50 flex flex-col">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-bg-main border border-stroke rounded-2xl shadow-xl overflow-hidden z-50 flex flex-col">
                 {isSearching ? (
                     <div className="p-6 flex flex-col items-center justify-center gap-2 text-primary">
                         <Loader2 className="w-6 h-6 animate-spin" />
@@ -126,7 +134,7 @@ export default function Navbar() {
                                     key={product.id}
                                     className="flex items-center gap-3 p-3 hover:bg-bg-sec transition-colors border-b border-stroke/50 last:border-0"
                                 >
-                                    <div className="relative w-12 h-12 bg-bg-main border border-stroke rounded-lg overflow-hidden shrink-0">
+                                    <div className="relative w-12 h-12 bg-bg-main dark:bg-zinc-300 border border-stroke rounded-lg overflow-hidden shrink-0">
                                         <Image src={product.thumbnail} alt={product.title} fill className="object-contain mix-blend-multiply p-1" />
                                     </div>
                                     <div className="flex flex-col">
@@ -155,7 +163,7 @@ export default function Navbar() {
     };
 
     return (
-        <header className="w-full bg-white border-b border-stroke sticky top-0 z-40 shadow-sm">
+        <header className="w-full bg-bg-main border-b border-stroke sticky top-0 z-40 shadow-sm transition-colors duration-300">
             <div className="w-[90%] lg:w-[85%] mx-auto h-20 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                     <button
@@ -185,7 +193,7 @@ export default function Navbar() {
                         onChange={(e) => setQuery(e.target.value)}
                         onFocus={() => { if (query.trim().length >= 2) setShowResults(true); }}
                         placeholder="جستجو در محصولات..."
-                        className="w-full bg-bg-sec border border-stroke rounded-xl h-11 px-4 pr-11 text-sm font-medium text-text-main focus:outline-none focus:border-primary focus:bg-white transition-colors"
+                        className="w-full bg-bg-sec border border-stroke rounded-xl h-11 px-4 pr-11 text-sm font-medium text-text-main focus:outline-none focus:border-primary focus:bg-bg-main transition-colors"
                     />
                     <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-text-sec hover:text-primary transition-colors">
                         <Search className="w-5 h-5" />
@@ -193,6 +201,7 @@ export default function Navbar() {
                     {renderSearchResults()}
                 </form>
                 <div className="flex items-center gap-2 md:gap-3">
+                    <ThemeToggle />
                     <div className="hidden sm:block">
                         {isMounted ? (
                             phone ? (
@@ -231,7 +240,7 @@ export default function Navbar() {
                     onClick={() => setIsMenuOpen(false)}
                 ></div>
             )}
-            <div className={`fixed top-0 right-0 h-full w-70 sm:w-[320px] bg-white z-50 transform transition-transform duration-300 ease-in-out md:hidden flex flex-col shadow-2xl ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div className={`fixed top-0 right-0 h-full w-70 sm:w-[320px] bg-bg-main z-50 transform transition-transform duration-300 ease-in-out md:hidden flex flex-col shadow-2xl ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
                 <div className="flex items-center justify-between p-6 border-b border-stroke">
                     <span className="font-black text-xl text-primary">منوی سایت</span>
                     <button onClick={() => setIsMenuOpen(false)} className="p-2 bg-bg-sec text-text-main hover:bg-red-50 hover:text-red-500 rounded-xl transition-colors">
@@ -246,7 +255,7 @@ export default function Navbar() {
                             onChange={(e) => setQuery(e.target.value)}
                             onFocus={() => { if (query.trim().length >= 2) setShowResults(true); }}
                             placeholder="جستجو..."
-                            className="w-full bg-white border border-stroke rounded-xl h-12 px-4 pr-11 text-sm font-medium text-text-main focus:outline-none focus:border-primary transition-colors shadow-sm"
+                            className="w-full bg-bg-main border border-stroke rounded-xl h-12 px-4 pr-11 text-sm font-medium text-text-main focus:outline-none focus:border-primary transition-colors shadow-sm"
                         />
                         <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-text-sec hover:text-primary transition-colors">
                             <Search className="w-5 h-5" />
@@ -263,7 +272,7 @@ export default function Navbar() {
                     {isMounted ? (
                         phone ? (
                             <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 font-bold text-text-main hover:text-primary transition-colors">
-                                <div className="w-10 h-10 bg-white border border-stroke rounded-full flex items-center justify-center shadow-sm shrink-0">
+                                <div className="w-10 h-10 bg-bg-main border border-stroke rounded-full flex items-center justify-center shadow-sm shrink-0">
                                     <User className="w-5 h-5 text-primary" />
                                 </div>
                                 <div className="flex flex-col">
@@ -288,7 +297,8 @@ export default function Navbar() {
                     onClick={() => setIsCartOpen(false)}
                 ></div>
             )}
-            <div className={`fixed top-0 left-0 h-full w-[85%] sm:w-95 bg-white z-50 transform transition-transform duration-300 ease-in-out flex flex-col shadow-2xl ${isCartOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <div className={`fixed top-0 left-0 h-full w-[85%] sm:w-95 bg-bg-main z-50 transform transition-transform duration-300 ease-in-out flex flex-col shadow-2xl ${isCartOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+
                 <div className="flex items-center justify-between p-6 border-b border-stroke bg-bg-sec/50">
                     <div className="flex items-center gap-2">
                         <ShoppingBasket className="w-6 h-6 text-primary" />
@@ -297,18 +307,18 @@ export default function Navbar() {
                             {items.reduce((total, item) => total + item.quantity, 0)} کالا
                         </span>
                     </div>
-                    <button onClick={() => setIsCartOpen(false)} className="p-2 bg-white text-text-main hover:bg-red-50 hover:text-red-500 rounded-xl border border-stroke transition-colors">
+                    <button onClick={() => setIsCartOpen(false)} className="p-2 bg-bg-main text-text-main hover:bg-red-50 hover:text-red-500 rounded-xl border border-stroke transition-colors">
                         <X className="w-5 h-5" />
                     </button>
                 </div>
-                <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-white scrollbar-none">
+                <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-bg-main scrollbar-none">
                     {items.length > 0 ? (
                         items.map((item) => {
                             const fakeExchangeRate = 200000;
                             const tomanPrice = item.price * fakeExchangeRate;
                             return (
                                 <div key={item.id} className="flex gap-4 bg-bg-main border border-stroke p-3 rounded-2xl hover:border-primary/30 transition-colors">
-                                    <Link href={`/product/${item.id}`} onClick={() => setIsCartOpen(false)} className="relative w-20 h-20 bg-bg-sec rounded-xl shrink-0 p-1">
+                                    <Link href={`/product/${item.id}`} onClick={() => setIsCartOpen(false)} className="relative w-20 h-20 bg-bg-sec dark:bg-zinc-300 rounded-xl shrink-0 p-1">
                                         <Image src={item.thumbnail} alt={item.title} fill className="object-contain mix-blend-multiply" />
                                     </Link>
                                     <div className="flex flex-col flex-1 justify-between py-1">
@@ -320,7 +330,7 @@ export default function Navbar() {
                                                 <button onClick={() => increaseQuantity(item.id)} className="w-8 h-full flex items-center justify-center text-text-main hover:bg-primary hover:text-white transition-colors">
                                                     <Plus className="w-3 h-3" />
                                                 </button>
-                                                <span className="w-8 h-full flex items-center justify-center font-bold text-sm bg-white">
+                                                <span className="w-8 h-full flex items-center justify-center font-bold text-sm bg-bg-main">
                                                     {item.quantity}
                                                 </span>
                                                 <button onClick={() => decreaseQuantity(item.id)} className="w-8 h-full flex items-center justify-center text-text-main hover:bg-red-500 hover:text-white transition-colors">

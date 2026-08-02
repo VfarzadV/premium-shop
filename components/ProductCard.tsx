@@ -23,7 +23,7 @@ export default function ProductCard({ product }: { product: Product }) {
     const addToCart = useCartStore((state) => state.addToCart);
     const { items: wishlistItems, toggleWishlist } = useWishlistStore();
 
-useEffect(() => {
+    useEffect(() => {
         const timer = setTimeout(() => {
             setIsMounted(true);
         }, 0);
@@ -37,9 +37,10 @@ useEffect(() => {
         e.preventDefault();
         e.stopPropagation();
         addToCart(product);
+        
         Swal.fire({
-            title: 'اضافه شد!',
-            text: `«${product.title}» به سبد خرید اضافه شد.`,
+            title: 'به سبد خرید اضافه شد!',
+            text: `محصول ${product.title} با موفقیت به سبد خرید شما افزوده شد.`,
             icon: 'success',
             toast: true,
             position: 'bottom-end',
@@ -47,8 +48,9 @@ useEffect(() => {
             timer: 3000,
             timerProgressBar: true,
             customClass: {
-                popup: 'font-sans rounded-xl',
-                title: 'text-sm font-bold',
+                popup: 'font-sans rounded-xl bg-bg-main border border-stroke',
+                title: 'text-sm font-bold text-text-main',
+                htmlContainer: 'text-text-sec'
             }
         });
     };
@@ -76,7 +78,7 @@ useEffect(() => {
         'furniture': 'مبلمان',
         'home-decoration': 'دکوراسیون',
         'kitchen-accessories': 'لوازم آشپزخانه',
-        'beauty': 'آرایشی',
+        'beauty': 'زیبایی و سلامت',
         'fragrances': 'عطر و ادکلن',
         'skin-care': 'مراقبت پوست',
         'sports-accessories': 'لوازم ورزشی',
@@ -84,11 +86,12 @@ useEffect(() => {
     };
 
     return (
-        <div className="bg-white border border-stroke rounded-3xl p-4 flex flex-col group hover:shadow-xl hover:shadow-secondary/20 hover:border-primary/50 transition-all duration-300">
-            <div className="relative w-full aspect-square rounded-2xl overflow-hidden mb-4 bg-bg-sec flex items-center justify-center">
+        <div className="bg-bg-sec border border-stroke rounded-3xl p-4 flex flex-col group shodow hover:shadow-xl hover:shadow-secondary/20 hover:border-primary/50 transition-all duration-300">
+            <div className="relative w-full aspect-square rounded-2xl overflow-hidden mb-4 bg-bg-sec dark:bg-zinc-300 flex items-center justify-center p-2">
                 <span className="absolute top-3 right-3 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full z-10 shadow-sm">
                     {Math.round(product.discountPercentage)}٪
                 </span>
+                
                 <button
                     onClick={handleWishlist}
                     className={`absolute top-3 left-3 w-8 h-8 rounded-full flex items-center justify-center z-10 transition-all duration-300 shadow-sm active:scale-95 ${isWished
@@ -103,7 +106,7 @@ useEffect(() => {
                         src={product.thumbnail}
                         alt={product.title}
                         fill
-                        className="object-contain group-hover:scale-110 transition-transform duration-500"
+                        className="object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                 </Link>
@@ -128,6 +131,7 @@ useEffect(() => {
                     >
                         <ShoppingBasket className="w-5 h-5" />
                     </button>
+                    
                     <div className="flex flex-col items-end gap-0.5">
                         <span className="text-xs text-text-sec line-through decoration-red-500/50">
                             {oldTomanPrice.toLocaleString('fa-IR')}

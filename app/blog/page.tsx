@@ -37,7 +37,7 @@ export default async function BlogPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
                 {posts.map((post: Post) => (
-                    <div key={post.id} className="bg-white border border-stroke rounded-3xl p-5 flex flex-col group hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300">
+                    <div key={post.id} className="bg-bg-sec border border-stroke rounded-3xl p-5 flex flex-col group hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 transition-all duration-300">
                         <div className="flex flex-wrap gap-2 mb-4">
                             {post.tags.slice(0, 2).map((tag: string) => (
                                 <span key={tag} className="bg-bg-sec text-text-sec text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-wider">

@@ -100,7 +100,7 @@ export default function ProfilePage() {
 
     return (
         <main className="w-[90%] lg:w-[85%] mx-auto py-8 md:py-12 min-h-screen flex flex-col gap-8">
-            <div className="bg-white rounded-3xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between border border-stroke shadow-sm relative overflow-hidden group">
+            <div className="bg-bg-sec rounded-3xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between border border-stroke shadow-sm relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/30 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2 transition-transform group-hover:scale-150 duration-700"></div>
                 <div className="flex items-center gap-4 text-text-main z-10">
                     <div className="w-16 h-16 bg-secondary/30 text-primary rounded-2xl flex items-center justify-center border border-secondary/50 shadow-inner">
@@ -133,7 +133,7 @@ export default function ProfilePage() {
                             onClick={() => setActiveTab(tab.id)}
                             className={`flex items-center justify-center gap-3 p-4 md:p-5 rounded-2xl border transition-all duration-300 active:scale-95 ${isActive
                                 ? 'bg-primary border-primary shadow-md shadow-primary/20 text-white transform -translate-y-1'
-                                : 'bg-white border-stroke text-text-sec hover:border-primary/40 hover:bg-secondary/10 hover:text-primary'
+                                : 'bg-bg-sec border-stroke text-text-sec hover:border-primary/40 hover:bg-secondary/10 hover:text-primary'
                                 }`}
                         >
                             <Icon className={`w-5 h-5 md:w-6 md:h-6 ${isActive ? 'text-white' : ''}`} />
@@ -144,7 +144,7 @@ export default function ProfilePage() {
                     );
                 })}
             </div>
-            <div className="bg-white border border-stroke rounded-3xl p-6 md:p-10 shadow-sm min-h-100">
+            <div className="bg-bg-sec border border-stroke rounded-3xl p-6 md:p-10 shadow-sm min-h-100">
                 {activeTab === 'account' && (
                     <form className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col gap-10" onSubmit={handleSaveProfile}>
                         <div>
@@ -155,20 +155,20 @@ export default function ProfilePage() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">نام <span className="text-red-500">*</span></label>
-                                    <input name="firstName" value={formData.firstName} onChange={handleChange} type="text" className="w-full bg-bg-sec border border-stroke rounded-2xl py-3.5 px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="نام خود را وارد کنید" />
+                                    <input name="firstName" value={formData.firstName} onChange={handleChange} type="text" className="w-full bg-secondary border border-stroke rounded-2xl py-3.5 px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="نام خود را وارد کنید" />
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">نام خانوادگی <span className="text-red-500">*</span></label>
-                                    <input name="lastName" value={formData.lastName} onChange={handleChange} type="text" className="w-full bg-bg-sec border border-stroke rounded-2xl py-3.5 px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="نام خانوادگی خود را وارد کنید" />
+                                    <input name="lastName" value={formData.lastName} onChange={handleChange} type="text" className="w-full bg-secondary border border-stroke rounded-2xl py-3.5 px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="نام خانوادگی خود را وارد کنید" />
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">نام نمایشی <span className="text-red-500">*</span></label>
-                                    <input name="displayName" value={formData.displayName} onChange={handleChange} type="text" className="w-full bg-bg-sec border border-stroke rounded-2xl py-3.5 px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="مثلاً: فرزاد وطن‌دوست" />
+                                    <input name="displayName" value={formData.displayName} onChange={handleChange} type="text" className="w-full bg-secondary border border-stroke rounded-2xl py-3.5 px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="مثلاً: فرزاد وطن‌دوست" />
                                     <span className="text-xs text-text-sec/70 mt-1 pr-2">به این صورت اسم شما در بخش نظرات دیده خواهد شد.</span>
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">آدرس ایمیل</label>
-                                    <input name="email" value={formData.email} onChange={handleChange} type="email" dir="ltr" className="w-full bg-bg-sec border border-stroke rounded-2xl py-3.5 px-5 text-left focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="example@email.com" />
+                                    <input name="email" value={formData.email} onChange={handleChange} type="email" dir="ltr" className="w-full bg-secondary border border-stroke rounded-2xl py-3.5 px-5 text-left focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main font-medium" placeholder="example@email.com" />
                                 </div>
                             </div>
                         </div>
@@ -181,21 +181,21 @@ export default function ProfilePage() {
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">رمز عبور قبلی</label>
                                     <div className="relative">
-                                        <input type="password" dir="ltr" className="w-full bg-white border border-stroke rounded-2xl py-3.5 pl-4 pr-11 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main" placeholder="••••••••" />
+                                        <input type="password" dir="ltr" className="w-full bg-secondary border border-stroke rounded-2xl py-3.5 pl-4 pr-11 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main" placeholder="••••••••" />
                                         <KeyRound className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-sec/50" />
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">رمز عبور جدید</label>
                                     <div className="relative">
-                                        <input type="password" dir="ltr" className="w-full bg-white border border-stroke rounded-2xl py-3.5 pl-4 pr-11 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main" placeholder="••••••••" />
+                                        <input type="password" dir="ltr" className="w-full bg-secondary border border-stroke rounded-2xl py-3.5 pl-4 pr-11 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main" placeholder="••••••••" />
                                         <KeyRound className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-sec/50" />
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">تکرار رمز جدید</label>
                                     <div className="relative">
-                                        <input type="password" dir="ltr" className="w-full bg-white border border-stroke rounded-2xl py-3.5 pl-4 pr-11 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main" placeholder="••••••••" />
+                                        <input type="password" dir="ltr" className="w-full bg-secondary border border-stroke rounded-2xl py-3.5 pl-4 pr-11 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main" placeholder="••••••••" />
                                         <KeyRound className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-sec/50" />
                                     </div>
                                 </div>

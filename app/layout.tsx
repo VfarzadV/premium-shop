@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Online Shop",
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
     icon: "/favicon.png",
   },
 };
+
 const iranYekan = localFont({
   src: [
     { path: './fonts/IRANYekanThin.ttf', weight: '100', style: 'normal' },
@@ -31,11 +33,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fa" dir="rtl">
-      <body className={`${iranYekan.variable} font-sans  bg-bg-main text-text-main antialiased`}>
-        <Navbar />
-        {children}
-        <Footer />
+    <html lang="fa" dir="rtl" suppressHydrationWarning>
+      <body className={`${iranYekan.variable} font-sans bg-bg-main text-text-main antialiased transition-colors duration-300`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Navbar />
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

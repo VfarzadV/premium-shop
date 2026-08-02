@@ -94,7 +94,7 @@ export default function CheckoutPage() {
                     const isCurrent = step === s.num;
                     return (
                         <div key={s.num} className="flex flex-col items-center gap-2 bg-bg-main">
-                            <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center border-4 transition-colors duration-300 ${isActive ? 'bg-primary border-primary/20 text-white' : 'bg-white border-stroke text-stroke'
+                            <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center border-4 transition-colors duration-300 ${isActive ? 'bg-primary border-primary/20 text-white' : 'bg-bg-sec border-stroke text-stroke'
                                 } ${isCurrent ? 'scale-110 shadow-lg shadow-primary/30' : ''}`}>
                                 <Icon className="w-5 h-5 md:w-6 md:h-6" />
                             </div>
@@ -105,7 +105,7 @@ export default function CheckoutPage() {
                     );
                 })}
             </div>
-            <div className="bg-white border border-stroke rounded-3xl p-6 md:p-10 shadow-sm mt-8">
+            <div className="bg-bg-sec border border-stroke rounded-3xl p-6 md:p-10 shadow-sm mt-8">
                 {step === 1 && (
                     <form onSubmit={handleNextStep} className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col gap-8">
                         <div className="flex items-center gap-2 border-b border-stroke pb-4">
@@ -115,27 +115,27 @@ export default function CheckoutPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-text-sec">نام و نام خانوادگی <span className="text-red-500">*</span></label>
-                                <input required name="fullName" value={formData.fullName} onChange={handleInputChange} type="text" className="w-full bg-bg-sec border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main" placeholder="مثال: فرزاد وطندوست" />
+                                <input required name="fullName" value={formData.fullName} onChange={handleInputChange} type="text" className="w-full bg-secondary border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main" placeholder="مثال: فرزاد وطندوست" />
                             </div>
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-text-sec">شماره موبایل <span className="text-red-500">*</span></label>
-                                <input required name="phone" value={formData.phone} onChange={handleInputChange} type="tel" dir="ltr" className="w-full bg-bg-sec border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main text-left" placeholder="0912 345 6789" />
+                                <input required name="phone" value={formData.phone} onChange={handleInputChange} type="tel" dir="ltr" className="w-full bg-secondary border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main text-left" placeholder="0912 345 6789" />
                             </div>
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-text-sec">استان <span className="text-red-500">*</span></label>
-                                <input required name="province" value={formData.province} onChange={handleInputChange} type="text" className="w-full bg-bg-sec border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main" placeholder="مثال: تهران" />
+                                <input required name="province" value={formData.province} onChange={handleInputChange} type="text" className="w-full bg-secondary border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main" placeholder="مثال: تهران" />
                             </div>
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-text-sec">شهر <span className="text-red-500">*</span></label>
-                                <input required name="city" value={formData.city} onChange={handleInputChange} type="text" className="w-full bg-bg-sec border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main" placeholder="مثال: تهران" />
+                                <input required name="city" value={formData.city} onChange={handleInputChange} type="text" className="w-full bg-secondary border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main" placeholder="مثال: تهران" />
                             </div>
                             <div className="flex flex-col gap-2 md:col-span-2">
                                 <label className="text-sm font-bold text-text-sec">آدرس دقیق <span className="text-red-500">*</span></label>
-                                <textarea required name="address" value={formData.address} onChange={handleInputChange} rows={3} className="w-full bg-bg-sec border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main resize-none" placeholder="نام خیابان، کوچه، پلاک، واحد..."></textarea>
+                                <textarea required name="address" value={formData.address} onChange={handleInputChange} rows={3} className="w-full bg-secondary border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main resize-none" placeholder="نام خیابان، کوچه، پلاک، واحد..."></textarea>
                             </div>
                             <div className="flex flex-col gap-2 md:col-span-2">
                                 <label className="text-sm font-bold text-text-sec">کد پستی (اختیاری)</label>
-                                <input name="postalCode" value={formData.postalCode} onChange={handleInputChange} type="text" dir="ltr" className="w-full bg-bg-sec border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main text-left" placeholder="1234567890" />
+                                <input name="postalCode" value={formData.postalCode} onChange={handleInputChange} type="text" dir="ltr" className="w-full bg-secondary border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main text-left" placeholder="1234567890" />
                             </div>
                         </div>
                         <div className="flex justify-end border-t border-stroke pt-6">
@@ -237,7 +237,7 @@ export default function CheckoutPage() {
                             <Link href="/profile" className="flex-1 bg-primary text-white font-bold py-3.5 rounded-xl hover:bg-primary/90 transition-all shadow-md active:scale-95">
                                 پیگیری سفارش
                             </Link>
-                            <Link href="/" className="flex-1 bg-white border border-stroke text-text-main font-bold py-3.5 rounded-xl hover:bg-bg-sec transition-all active:scale-95">
+                            <Link href="/" className="flex-1 bg-bg-sec border border-stroke text-text-main font-bold py-3.5 rounded-xl hover:bg-bg-sec transition-all active:scale-95">
                                 بازگشت به خانه
                             </Link>
                         </div>

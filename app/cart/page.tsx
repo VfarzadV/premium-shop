@@ -37,7 +37,7 @@ export default function CartPage() {
     if (items.length === 0) {
         return (
             <main className="w-[90%] lg:w-[85%] mx-auto py-8 md:py-12 min-h-[70vh] flex flex-col items-center justify-center">
-                <div className="bg-white border border-stroke rounded-3xl p-12 text-center flex flex-col items-center gap-6 w-full max-w-2xl shadow-sm">
+                <div className="bg-bg-sec border border-stroke rounded-3xl p-12 text-center flex flex-col items-center gap-6 w-full max-w-2xl shadow-sm">
                     <div className="w-24 h-24 bg-secondary/30 rounded-full flex items-center justify-center">
                         <ShoppingBag className="w-12 h-12 text-primary opacity-50" />
                     </div>
@@ -63,7 +63,7 @@ export default function CartPage() {
             </div>
             <div className="flex flex-col lg:flex-row gap-8">
                 <div className="w-full lg:w-2/3 flex flex-col gap-4">
-                    <div className="flex items-center justify-between bg-white border border-stroke p-4 rounded-2xl shadow-sm">
+                    <div className="flex items-center justify-between bg-bg-sec border border-stroke p-4 rounded-2xl shadow-sm">
                         <span className="font-bold text-text-main text-sm">شما {items.length} کالا در سبد خرید دارید</span>
                         <button
                             onClick={clearCart}
@@ -78,8 +78,8 @@ export default function CartPage() {
                             const tomanPrice = item.price * fakeExchangeRate;
                             const totalPriceForItem = tomanPrice * item.quantity;
                             return (
-                                <div key={item.id} className="bg-white border border-stroke rounded-3xl p-4 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-6 shadow-sm hover:shadow-md transition-shadow">
-                                    <Link href={`/product/${item.id}`} className="relative w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-bg-sec overflow-hidden shrink-0 border border-stroke">
+                                <div key={item.id} className="bg-bg-sec border border-stroke rounded-3xl p-4 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-6 shadow-sm hover:shadow-md transition-shadow">
+                                    <Link href={`/product/${item.id}`} className="relative w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-bg-sec overflow-hidden shrink-0 border border-stroke dark:bg-zinc-300">
                                         <Image src={item.thumbnail} alt={item.title} fill className="object-contain p-2 mix-blend-multiply hover:scale-105 transition-transform" />
                                     </Link>
                                     <div className="flex flex-col grow gap-2 w-full">
@@ -97,7 +97,7 @@ export default function CartPage() {
                                                 >
                                                     <Plus className="w-4 h-4" />
                                                 </button>
-                                                <span className="w-10 h-10 flex items-center justify-center font-bold text-text-main bg-white">
+                                                <span className="w-10 h-10 flex items-center justify-center font-bold text-text-main bg-bg-sec">
                                                     {item.quantity}
                                                 </span>
                                                 <button

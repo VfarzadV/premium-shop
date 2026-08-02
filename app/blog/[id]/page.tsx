@@ -33,12 +33,12 @@ export default async function SingleBlogPost({ params }: { params: Promise<{ id:
         <main className="w-[90%] lg:w-[85%] mx-auto py-10 md:py-16">
             <Link 
                 href="/blog"
-                className="inline-flex items-center gap-2 text-text-sec hover:text-primary font-bold mb-8 transition-colors bg-white border border-stroke px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md"
+                className="inline-flex items-center gap-2  text-text-sec hover:text-primary font-bold mb-8 transition-colors bg-secondary border border-stroke px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md"
             >
                 <ArrowRight className="w-5 h-5" />
                 بازگشت به مجله
             </Link>
-            <article className="max-w-4xl mx-auto bg-white border border-stroke rounded-[2.5rem] p-8 md:p-14 shadow-sm">
+            <article className="max-w-4xl mx-auto bg-secondary border border-stroke rounded-[2.5rem] p-8 md:p-14 shadow-sm">
                 <div className="flex flex-wrap gap-2 mb-6">
                     {post.tags.map((tag: string) => (
                         <span key={tag} className="flex items-center gap-1.5 bg-primary/10 text-primary text-xs font-black px-4 py-2 rounded-xl uppercase tracking-wider">

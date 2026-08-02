@@ -6,7 +6,7 @@ import { SlidersHorizontal, X, ArrowDownWideNarrow, Loader2, Check } from 'lucid
 
 export default function ShopPage() {
     const [products, setProducts] = useState<Product[]>([]);
-    const [categories, setCategories] = useState<{slug: string, name: string}[]>([]);
+    const [categories, setCategories] = useState<{ slug: string, name: string }[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState('all');
     const [sortBy, setSortBy] = useState('default');
@@ -22,7 +22,7 @@ export default function ShopPage() {
                 ]);
                 const productsData = await productsRes.json();
                 const categoriesData = await categoriesRes.json();
-                
+
                 setProducts(productsData.products);
                 setCategories(categoriesData);
             } catch (error) {
@@ -58,10 +58,9 @@ export default function ShopPage() {
         <main className="w-[90%] lg:w-[85%] mx-auto py-8">
             <div className="flex items-center justify-between mb-8">
                 <h1 className="text-2xl font-black text-text-main">فروشگاه</h1>
-                
-                <button 
+                <button
                     onClick={() => setIsFilterOpen(true)}
-                    className="md:hidden flex items-center gap-2 bg-white border border-stroke px-4 py-2.5 rounded-xl hover:bg-bg-sec active:scale-95 transition-all text-sm font-bold text-text-main"
+                    className="md:hidden flex items-center gap-2 bg-bg-sec border border-stroke px-4 py-2.5 rounded-xl hover:bg-bg-sec active:scale-95 transition-all text-sm font-bold text-text-main"
                 >
                     <SlidersHorizontal className="w-4 h-4 text-primary" />
                     فیلتر و مرتب‌سازی
@@ -69,7 +68,7 @@ export default function ShopPage() {
             </div>
             <div className="flex flex-col md:flex-row gap-8">
                 <aside className="hidden md:flex flex-col w-72 shrink-0 gap-6 sticky top-28 h-fit">
-                    <div className="bg-white border border-stroke rounded-3xl p-6 shadow-sm">
+                    <div className="bg-bg-sec border border-stroke rounded-3xl p-6 shadow-sm">
                         <div className="flex items-center gap-2 mb-4">
                             <ArrowDownWideNarrow className="w-5 h-5 text-primary" />
                             <h3 className="font-black text-text-main">مرتب‌سازی</h3>
@@ -87,7 +86,7 @@ export default function ShopPage() {
                             ))}
                         </div>
                     </div>
-                    <div className="bg-white border border-stroke rounded-3xl p-6 shadow-sm">
+                    <div className="bg-bg-sec border border-stroke rounded-3xl p-6 shadow-sm">
                         <div className="flex items-center gap-2 mb-4">
                             <SlidersHorizontal className="w-5 h-5 text-primary" />
                             <h3 className="font-black text-text-main">دسته‌بندی‌ها</h3>
@@ -124,7 +123,7 @@ export default function ShopPage() {
                                     <ProductCard key={product.id} product={product} />
                                 ))}
                             </div>
-                            
+
                             {filteredProducts.length === 0 && (
                                 <div className="w-full bg-white border border-stroke rounded-3xl p-12 text-center flex flex-col items-center gap-4">
                                     <div className="w-20 h-20 bg-bg-sec rounded-full flex items-center justify-center">
@@ -132,8 +131,8 @@ export default function ShopPage() {
                                     </div>
                                     <h3 className="text-xl font-black text-text-main">محصولی یافت نشد!</h3>
                                     <p className="text-text-sec font-medium">لطفاً فیلترهای دیگری را امتحان کنید.</p>
-                                    <button 
-                                        onClick={() => {setActiveCategory('all'); setSortBy('default');}}
+                                    <button
+                                        onClick={() => { setActiveCategory('all'); setSortBy('default'); }}
                                         className="mt-4 bg-primary text-white font-bold px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors"
                                     >
                                         حذف فیلترها
@@ -145,16 +144,15 @@ export default function ShopPage() {
                 </div>
             </div>
             {isFilterOpen && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black/60 z-50 md:hidden backdrop-blur-sm transition-opacity"
                     onClick={() => setIsFilterOpen(false)}
                 ></div>
             )}
-            <div className={`fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl transform transition-transform duration-300 ease-in-out flex flex-col max-h-[85vh] md:hidden shadow-[0_-10px_40px_rgba(0,0,0,0.1)] ${isFilterOpen ? 'translate-y-0' : 'translate-y-full'}`}>
-                
+            <div className={`fixed bottom-0 left-0 right-0 z-50 bg-bg-sec rounded-t-3xl transform transition-transform duration-300 ease-in-out flex flex-col max-h-[85vh] md:hidden shadow-[0_-10px_40px_rgba(0,0,0,0.1)] ${isFilterOpen ? 'translate-y-0' : 'translate-y-full'}`}>
                 <div className="flex items-center justify-between p-6 border-b border-stroke">
                     <span className="font-black text-lg text-text-main">فیلتر و مرتب‌سازی</span>
-                    <button 
+                    <button
                         onClick={() => setIsFilterOpen(false)}
                         className="p-2 bg-bg-sec text-text-main hover:bg-red-50 hover:text-red-500 rounded-xl transition-colors"
                     >
@@ -162,7 +160,6 @@ export default function ShopPage() {
                     </button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-8 scrollbar-none">
-                    
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-2">
                             <ArrowDownWideNarrow className="w-5 h-5 text-primary" />
@@ -173,7 +170,7 @@ export default function ShopPage() {
                                 <button
                                     key={option.id}
                                     onClick={() => setSortBy(option.id)}
-                                    className={`flex items-center justify-center p-3 rounded-xl text-xs font-bold transition-all border ${sortBy === option.id ? 'bg-primary border-primary text-white shadow-md' : 'bg-white border-stroke text-text-sec hover:border-primary/50'}`}
+                                    className={`flex items-center justify-center p-3 rounded-xl text-xs font-bold transition-all border ${sortBy === option.id ? 'bg-primary border-primary text-white shadow-md' : 'bg-bg-sec border-stroke text-text-sec hover:border-primary/50'}`}
                                 >
                                     {option.label}
                                 </button>
@@ -188,7 +185,7 @@ export default function ShopPage() {
                         <div className="flex flex-wrap gap-2">
                             <button
                                 onClick={() => setActiveCategory('all')}
-                                className={`px-4 py-2.5 rounded-full text-xs font-bold transition-all border ${activeCategory === 'all' ? 'bg-primary text-white border-primary shadow-md' : 'bg-white border-stroke text-text-sec hover:bg-bg-sec'}`}
+                                className={`px-4 py-2.5 rounded-full text-xs font-bold transition-all border ${activeCategory === 'all' ? 'bg-primary text-white border-primary shadow-md' : 'bg-bg-sec border-stroke text-text-sec hover:bg-bg-sec'}`}
                             >
                                 همه محصولات
                             </button>
@@ -196,7 +193,7 @@ export default function ShopPage() {
                                 <button
                                     key={category.slug}
                                     onClick={() => setActiveCategory(category.slug)}
-                                    className={`px-4 py-2.5 rounded-full text-xs font-bold transition-all border capitalize ${activeCategory === category.slug ? 'bg-primary text-white border-primary shadow-md' : 'bg-white border-stroke text-text-sec hover:bg-bg-sec'}`}
+                                    className={`px-4 py-2.5 rounded-full text-xs font-bold transition-all border capitalize ${activeCategory === category.slug ? 'bg-primary text-white border-primary shadow-md' : 'bg-bg-sec border-stroke text-text-sec hover:bg-bg-sec'}`}
                                 >
                                     {category.name.replace('-', ' ')}
                                 </button>
@@ -204,13 +201,13 @@ export default function ShopPage() {
                         </div>
                     </div>
                 </div>
-                <div className="p-6 border-t border-stroke bg-white shadow-[0_-10px_30px_rgba(0,0,0,0.03)]">
-                    <button 
+                <div className="p-6 border-t border-stroke bg-bg-sec shadow-[0_-10px_30px_rgba(0,0,0,0.03)]">
+                    <button
                         onClick={() => setIsFilterOpen(false)}
                         className="w-full bg-primary text-white font-black py-4 rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 active:scale-95 flex items-center justify-center gap-2"
                     >
                         اعمال فیلترها و مشاهده
-                        <span className="bg-white/20 px-2 py-0.5 rounded-md text-sm">{filteredProducts.length}</span>
+                        <span className="bg-bg-sec/20 px-2 py-0.5 rounded-md text-sm">{filteredProducts.length}</span>
                     </button>
                 </div>
             </div>

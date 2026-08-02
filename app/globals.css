@@ -11,6 +11,16 @@
   --color-stroke: #E9E9E8;
 }
 
+.dark {
+  --color-primary: #947456;
+  --color-secondary: #574635;
+  --color-text-main: #F4F4F5;
+  --color-text-sec: #A1A1AA;
+  --color-bg-main: #121212;
+  --color-bg-sec: #1E1E1E;
+  --color-stroke: #2D2D2D;
+}
+
 body {
   background-color: var(--color-bg-main);
   color: var(--color-text-main);

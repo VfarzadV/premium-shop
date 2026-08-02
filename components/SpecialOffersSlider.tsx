@@ -84,12 +84,12 @@ export default function SpecialOffersSlider({ products }: { products: Product[] 
                             >
                                 <Heart className={`w-3.5 h-3.5 ${isWished ? 'fill-current' : ''}`} />
                             </button>
-                            <Link href={`/product/${product.id}`} className="relative w-full aspect-square rounded-lg overflow-hidden mb-3 bg-bg-sec flex items-center justify-center p-2 ">
+                            <Link href={`/product/${product.id}`} className="relative w-full aspect-square rounded-lg overflow-hidden mb-3 bg-bg-sec flex items-center justify-center p-2 dark:bg-zinc-300 ">
                                 <Image
                                     src={product.thumbnail}
                                     alt={product.title}
                                     fill
-                                    className="object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                                    className="object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300 "
                                     sizes="(max-width: 768px) 100vw, 240px"
                                 />
                             </Link>
