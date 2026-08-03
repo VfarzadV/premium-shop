@@ -4,6 +4,8 @@ import SpecialOffers from "@/components/SpecialOffers";
 import Features from "@/components/Features";
 import InstagramBanner from "@/components/InstagramBanner";
 import BlogSection from "@/components/BlogSection"
+import Worthiness from "@/components/Worthiness";
+import RecentlyViewed from "@/components/RecentlyViewed";
 
 export default function Home() {
   return (
@@ -14,6 +16,8 @@ export default function Home() {
       <Features />
       <InstagramBanner />
       <BlogSection />
+      <Worthiness />
+      <RecentlyViewed />
     </main>
   );
 }

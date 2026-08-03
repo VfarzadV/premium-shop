@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -13,6 +13,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { useCartStore } from '@/store/useCartStore';
 import Swal from 'sweetalert2';
+import { useRecentStore } from '@/store/useRecentStore';
 
 const mockColors = [
     { id: 'black', hex: '#000000', name: 'مشکی' },
@@ -50,6 +51,13 @@ export default function ProductClient({ product, similarProducts }: { product: P
     const tomanPrice = product.price * fakeExchangeRate;
     const oldTomanPrice = Math.round(tomanPrice / (1 - product.discountPercentage / 100));
     const addToCart = useCartStore((state) => state.addToCart);
+    const addRecent = useRecentStore((state) => state.addRecent);
+
+    useEffect(() => {
+        if (product) {
+            addRecent(product);
+        }
+    }, [product, addRecent]);
 
     const handleAddToCart = (e: React.MouseEvent, item: Product) => {
         e.preventDefault();

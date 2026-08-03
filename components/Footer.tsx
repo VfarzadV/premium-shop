@@ -40,6 +40,7 @@ export default function Footer() {
                         {[
                             { name: 'فروشگاه', link: '/shop' },
                             { name: 'وبلاگ', link: '/blog' },
+                            { name: 'درباره ما', link: '/about' },
                             { name: 'پیگیری سفارش', link: '/tracking' },
                             { name: 'تماس با ما', link: '/contact' },
                             { name: 'قوانین و مقررات', link: '/rules' },
