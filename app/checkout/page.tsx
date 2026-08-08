@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { MapPin, Truck, CreditCard, CheckCircle2, ChevronRight, ShoppingBag, Loader2 } from 'lucide-react';
+import { MapPin, Truck, CreditCard, CheckCircle2, ChevronRight, ShoppingBag, Loader2, Award } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import { useUserStore } from '@/store/useUserStore';
 import { useOrderStore } from '@/store/useOrderStore';
+import { usePointsStore } from '@/store/usePointsStore';
 
 export default function CheckoutPage() {
     const [isMounted, setIsMounted] = useState(false);
@@ -26,6 +27,8 @@ export default function CheckoutPage() {
         postalCode: ''
     });
     const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>('standard');
+    const { addPoints } = usePointsStore();
+    const [earnedPointsDisplay, setEarnedPointsDisplay] = useState(0);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -46,12 +49,18 @@ export default function CheckoutPage() {
         setStep(2);
     };
 
-    const handlePayment = () => {
+const handlePayment = () => {
         setIsProcessing(true);
         setTimeout(() => {
             setIsProcessing(false);
             const newOrderId = `PSH-${Math.floor(100000 + Math.random() * 900000)}`;
-            setOrderId(newOrderId)
+            setOrderId(newOrderId);
+            const points = Math.floor(finalTotal / 100000);
+            if (points > 0) {
+                addPoints(points);
+                setEarnedPointsDisplay(points);
+            }
+
             addOrder({
                 id: newOrderId,
                 date: new Date().toLocaleDateString('fa-IR'),
@@ -228,6 +237,19 @@ export default function CheckoutPage() {
                             <p className="text-text-sec leading-relaxed max-w-md mx-auto">
                                 سفارش شما با موفقیت ثبت شد و در صف پردازش قرار گرفت. از اینکه پریمیوم‌شاپ را انتخاب کردید سپاسگزاریم.
                             </p>
+                            {earnedPointsDisplay > 0 && (
+                            <div className="bg-linear-to-r from-yellow-500/10 via-orange-500/10 to-yellow-500/10 border border-yellow-500/30 rounded-2xl p-4 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 w-full max-w-sm mt-2 mx-auto">
+                                <div className="w-10 h-10 bg-yellow-500 text-white rounded-full flex items-center justify-center shrink-0 shadow-sm">
+                                    <Award className="w-5 h-5" />
+                                </div>
+                                <div className=" text-right">
+                                    <p className="text-sm font-bold text-yellow-700">
+                                        تبریک! شما <span className="font-black text-lg mx-1">{earnedPointsDisplay}</span> امتیاز گرفتید.
+                                    </p>
+                                    <p className="text-xs text-yellow-600 mt-0.5">قابل تبدیل به تخفیف در خریدهای بعدی.</p>
+                                </div>
+                            </div>
+                        )}
                         </div>
                         <div className="bg-bg-sec border border-stroke rounded-2xl p-6 w-full max-w-sm mt-2">
                             <p className="text-sm text-text-sec mb-2">کد پیگیری سفارش شما:</p>

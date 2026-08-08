@@ -1,19 +1,21 @@
 "use client";
 
 import { useState } from 'react';
-import { User, ShoppingBag, Heart, MapPin, LogOut, Shield, KeyRound, Trash2 } from 'lucide-react';
+import { User, ShoppingBag, Heart, MapPin, LogOut, Shield, KeyRound, Trash2, Award, Ticket } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/useUserStore';
 import Swal from 'sweetalert2';
 import { useOrderStore } from '@/store/useOrderStore';
 import { useWishlistStore } from '@/store/useWishlistStore';
+import { usePointsStore } from '@/store/usePointsStore';
 import ProductCard from '@/components/ProductCard';
 
 const tabs = [
     { id: 'account', title: 'اطلاعات حساب', icon: User },
-    { id: 'orders', title: 'سفارش ها', icon: ShoppingBag },
-    { id: 'wishlist', title: 'لیست علاقه مندی ها', icon: Heart },
-    { id: 'addresses', title: 'آدرس ها', icon: MapPin },
+    { id: 'orders', title: 'سفارش‌ها', icon: ShoppingBag },
+    { id: 'wishlist', title: 'علاقه‌مندی‌ها', icon: Heart },
+    { id: 'addresses', title: 'آدرس‌ها', icon: MapPin },
+    { id: 'club', title: 'باشگاه مشتریان', icon: Award },
 ];
 
 export default function ProfilePage() {
@@ -22,6 +24,8 @@ export default function ProfilePage() {
     const { phone, firstName, lastName, displayName, email, updateProfile, logout } = useUserStore();
     const { orders, removeOrder } = useOrderStore();
     const { items: wishlistItems } = useWishlistStore();
+    const { points, redeemPoints } = usePointsStore();
+
 
     const [formData, setFormData] = useState({
         firstName: firstName || '',
@@ -96,6 +100,41 @@ export default function ProfilePage() {
     const handleLogout = () => {
         logout();
         router.push('/');
+    };
+
+    const handleRedeem = (cost: number) => {
+        const result = redeemPoints(cost);
+        if (result.success) {
+            Swal.fire({
+                title: 'کد تخفیف شما!',
+                html: `<p class="text-text-sec">${result.message}</p><div class="bg-bg-sec border border-stroke p-4 rounded-xl mt-4 text-2xl font-black tracking-widest text-primary dir-ltr">${result.discountCode}</div><p class="text-xs text-text-sec mt-2">کد را کپی کرده و در سبد خرید استفاده کنید.</p>`,
+                icon: 'success',
+                confirmButtonText: 'متوجه شدم',
+                confirmButtonColor: '#6E543D',
+                background: 'var(--color-bg-main)',
+                color: 'var(--color-text-main)', 
+                customClass: { 
+                    popup: 'rounded-3xl font-sans border border-stroke', 
+                    title: 'font-black', 
+                    confirmButton: 'font-bold rounded-xl px-8 py-3' 
+                }
+            });
+        } else {
+            Swal.fire({
+                title: 'امتیاز ناکافی!',
+                text: result.message,
+                icon: 'error',
+                confirmButtonText: 'باشه',
+                confirmButtonColor: '#ef4444',
+                background: 'var(--color-bg-main)', 
+                color: 'var(--color-text-main)',
+                customClass: { 
+                    popup: 'rounded-3xl font-sans border border-stroke', 
+                    title: 'font-black', 
+                    confirmButton: 'font-bold rounded-xl px-8 py-3' 
+                }
+            });
+        }
     };
 
     return (
@@ -286,6 +325,60 @@ export default function ProfilePage() {
                         </div>
                         <h3 className="text-xl font-black text-text-main">آدرسی ثبت نشده است!</h3>
                         <p className="text-text-sec">برای ارسال سریع‌تر سفارشات، آدرس خود را ثبت کنید.</p>
+                    </div>
+                )}
+                {activeTab === 'club' && (
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col gap-6">
+                        <div className="flex items-center gap-2 mb-2 border-b border-stroke pb-4">
+                            <Award className="w-5 h-5 text-primary" />
+                            <h2 className="text-lg font-black text-text-main">باشگاه مشتریان پریمیوم</h2>
+                        </div>
+                        <div className="bg-linear-to-br from-primary to-yellow-600 rounded-3xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl shadow-primary/20 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+                            <div className="relative z-10 flex flex-col items-center md:items-start text-center md:text-right gap-2">
+                                <span className="text-white/80 font-medium">موجودی امتیازات شما</span>
+                                <div className="flex items-end gap-2">
+                                    <span className="text-5xl font-black">{points}</span>
+                                    <span className="text-lg mb-1">امتیاز</span>
+                                </div>
+                            </div>
+                            <div className="relative z-10 w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30 shadow-inner">
+                                <Award className="w-12 h-12 text-white" />
+                            </div>
+                        </div>
+                        <div className="mt-4">
+                            <h3 className="font-bold text-text-main mb-4">تبدیل امتیاز به جایزه</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="bg-bg-sec border border-stroke rounded-2xl p-6 flex flex-col gap-4 hover:border-primary/50 transition-colors group">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                            <Ticket className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-black text-text-main">تخفیف ۵۰ هزار تومانی</h4>
+                                            <span className="text-sm text-text-sec">هزینه: ۲۰ امتیاز</span>
+                                        </div>
+                                    </div>
+                                    <button onClick={() => handleRedeem(20)} className="w-full bg-primary/10 text-primary font-bold py-3 rounded-xl hover:bg-primary hover:text-white transition-colors mt-2">
+                                        دریافت کد تخفیف
+                                    </button>
+                                </div>
+                                <div className="bg-bg-sec border border-stroke rounded-2xl p-6 flex flex-col gap-4 hover:border-primary/50 transition-colors group">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                            <Ticket className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-black text-text-main">تخفیف ۱۵۰ هزار تومانی</h4>
+                                            <span className="text-sm text-text-sec">هزینه: ۵۰ امتیاز</span>
+                                        </div>
+                                    </div>
+                                    <button onClick={() => handleRedeem(50)} className="w-full bg-primary/10 text-primary font-bold py-3 rounded-xl hover:bg-primary hover:text-white transition-colors mt-2">
+                                        دریافت کد تخفیف
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

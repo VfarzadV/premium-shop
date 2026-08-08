@@ -4,9 +4,10 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
-import { ShoppingBasket, Search, Menu, X, User, LogIn, Gem, Trash2, Plus, Minus, ArrowLeft, Loader2 } from 'lucide-react';
+import { ShoppingBasket, Search, Menu, X, User, LogIn, Gem, Trash2, Plus, Minus, ArrowLeft, Loader2, ArrowRightLeft } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import { useUserStore } from '@/store/useUserStore';
+import { useCompareStore } from '@/store/useCompareStore';
 import ThemeToggle from './ThemeToggle';
 
 interface SearchProduct {
@@ -35,6 +36,7 @@ export default function Navbar() {
 
     const { items, increaseQuantity, decreaseQuantity, getTotalPrice } = useCartStore();
     const { phone, firstName, displayName } = useUserStore();
+    const { compareItems } = useCompareStore();
     const nameToShow = displayName || firstName || '';
 
     useEffect(() => {
@@ -183,6 +185,7 @@ export default function Navbar() {
                     <nav className="hidden md:flex items-center gap-6 mr-8">
                         <Link href="/" className="font-bold text-text-main hover:text-primary transition-colors">خانه</Link>
                         <Link href="/shop" className="font-bold text-text-main hover:text-primary transition-colors">فروشگاه</Link>
+                        <Link href="/brands" className="font-bold text-text-main hover:text-primary transition-colors">برندها</Link>
                         <Link href="/blog" className="font-bold text-text-main hover:text-primary transition-colors">مجله</Link>
                     </nav>
                 </div>
@@ -221,6 +224,18 @@ export default function Navbar() {
                             <div className="w-24 h-10 bg-stroke rounded-xl animate-pulse"></div>
                         )}
                     </div>
+                    {isMounted && compareItems.length > 0 && (
+                        <Link
+                            href="/compare"
+                            className="relative flex items-center justify-center w-11 h-11 hover:bg-secondary rounded-lg transition-colors shrink-0 cursor-pointer animate-in fade-in slide-in-from-left-4"
+                            title="مقایسه محصولات"
+                        >
+                            <ArrowRightLeft className="w-6 h-6 text-text-main" />
+                            <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm animate-in zoom-in">
+                                {compareItems.length}
+                            </span>
+                        </Link>
+                    )}
                     <button
                         onClick={() => setIsCartOpen(true)}
                         className="relative flex items-center justify-center w-11 h-11 hover:bg-secondary rounded-lg transition-colors shrink-0 cursor-pointer"
@@ -266,6 +281,7 @@ export default function Navbar() {
                 <nav className="flex flex-col p-4 gap-2 overflow-y-auto">
                     <Link href="/" onClick={() => setIsMenuOpen(false)} className="font-bold text-text-main hover:bg-primary/10 hover:text-primary p-3 rounded-xl transition-colors">خانه</Link>
                     <Link href="/shop" onClick={() => setIsMenuOpen(false)} className="font-bold text-text-main hover:bg-primary/10 hover:text-primary p-3 rounded-xl transition-colors">فروشگاه</Link>
+                    <Link href="/brands" onClick={() => setIsMenuOpen(false)} className="font-bold text-text-main hover:bg-primary/10 hover:text-primary p-3 rounded-xl transition-colors">برندها</Link>
                     <Link href="/blog" onClick={() => setIsMenuOpen(false)} className="font-bold text-text-main hover:bg-primary/10 hover:text-primary p-3 rounded-xl transition-colors">مجله</Link>
                 </nav>
                 <div className="mt-auto p-6 border-t border-stroke bg-bg-sec/30">

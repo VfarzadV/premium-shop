@@ -39,6 +39,7 @@ export default function Footer() {
                     <div className="flex flex-col gap-3 mt-1">
                         {[
                             { name: 'فروشگاه', link: '/shop' },
+                            { name: 'برندها', link: '/brands' },
                             { name: 'وبلاگ', link: '/blog' },
                             { name: 'درباره ما', link: '/about' },
                             { name: 'پیگیری سفارش', link: '/tracking' },
