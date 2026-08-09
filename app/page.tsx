@@ -10,6 +10,7 @@ import PopularBrands from "@/components/PopularBrands";
 import LatestReviews from "@/components/LatestReviews";
 import TopProducts from "@/components/TopProducts";
 import TrustMetrics from "@/components/TrustMetrics";
+import StoreGallery from "@/components/StoreGallery";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
       <PopularBrands />
       <BlogSection />
       <Worthiness />
+      <StoreGallery />
       <LatestReviews />
       <RecentlyViewed />
       <TrustMetrics />
