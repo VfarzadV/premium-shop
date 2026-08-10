@@ -64,7 +64,7 @@ export default async function CategoryPage(props: {
 
     return (
         <main className="w-[90%] lg:w-[85%] mx-auto py-8 md:py-12 min-h-screen">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8 bg-white p-6 rounded-3xl border border-stroke shadow-sm">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8 bg-secondary p-6 rounded-3xl border border-stroke shadow-sm">
                 <div>
                     <h1 className="text-2xl font-black text-text-main">{currentCategory.title}</h1>
                     <p className="text-sm text-text-sec mt-1">نمایش محصولات {skipCount + 1} تا {Math.min(skipCount + limitPerPage, allProducts.length)} از {allProducts.length}</p>
@@ -81,7 +81,7 @@ export default async function CategoryPage(props: {
             </div>
             <div className="flex flex-col lg:flex-row gap-8">
                 <aside className="hidden lg:flex flex-col gap-6 w-1/4 shrink-0">
-                    <div className="bg-white border border-stroke rounded-3xl p-6 sticky top-6 shadow-sm">
+                    <div className="bg-secondary border border-stroke rounded-3xl p-6 sticky top-6 shadow-sm">
                         <div className="flex items-center gap-2 mb-6 border-b border-stroke pb-4">
                             <SlidersHorizontal className="w-5 h-5 text-primary" />
                             <h2 className="text-lg font-black text-text-main">فیلتر محصولات</h2>

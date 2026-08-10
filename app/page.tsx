@@ -1,16 +1,18 @@
+import dynamic from 'next/dynamic';
 import Banner from "@/components/Banner";
 import Categories from "@/components/Categories";
-import SpecialOffers from "@/components/SpecialOffers";
 import Features from "@/components/Features";
 import InstagramBanner from "@/components/InstagramBanner";
-import BlogSection from "@/components/BlogSection"
-import Worthiness from "@/components/Worthiness";
-import RecentlyViewed from "@/components/RecentlyViewed";
 import PopularBrands from "@/components/PopularBrands";
-import LatestReviews from "@/components/LatestReviews";
-import TopProducts from "@/components/TopProducts";
+import Worthiness from "@/components/Worthiness";
 import TrustMetrics from "@/components/TrustMetrics";
-import StoreGallery from "@/components/StoreGallery";
+import SmartRecommendations from "@/components/SmartRecommendations";
+const SpecialOffers = dynamic(() => import("@/components/SpecialOffers"));
+const TopProducts = dynamic(() => import("@/components/TopProducts"));
+const StoreGallery = dynamic(() => import("@/components/StoreGallery"));
+const LatestReviews = dynamic(() => import("@/components/LatestReviews"));
+const BlogSection = dynamic(() => import("@/components/BlogSection"));
+const RecentlyViewed = dynamic(() => import("@/components/RecentlyViewed"));
 
 export default function Home() {
   return (
@@ -22,6 +24,7 @@ export default function Home() {
       <TopProducts />
       <InstagramBanner />
       <PopularBrands />
+      <SmartRecommendations />
       <BlogSection />
       <Worthiness />
       <StoreGallery />

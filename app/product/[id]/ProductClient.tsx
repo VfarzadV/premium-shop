@@ -7,6 +7,7 @@ import {
     ChevronLeft, Star, ShieldCheck, Truck, RotateCcw,
     Headphones, ShoppingBasket, MessageSquare, Heart, Info, User, ArrowRightLeft
 } from 'lucide-react';
+import ProductZoom from '@/components/ProductZoom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
@@ -167,8 +168,8 @@ export default function ProductClient({ product, similarProducts }: { product: P
             </nav>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
                 <div className="lg:col-span-4 flex flex-col gap-4">
-                    <div className="relative w-full aspect-square bg-bg-sec rounded-3xl border border-stroke overflow-hidden flex items-center justify-center p-4">
-                        <Image src={activeImage} alt={product.title} fill className="object-contain p-4 mix-blend-multiply" />
+                    <div className="relative w-full aspect-square rounded-3xl overflow-hidden">
+                        <ProductZoom src={activeImage} alt={product.title} />
                         <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
                             <button onClick={handleWishlist} className={`w-10 h-10 rounded-full flex items-center justify-center shadow-sm transition-colors ${isWished ? 'bg-red-50 text-red-500 border border-red-200' : 'bg-white text-text-sec hover:text-red-500 border border-stroke'}`}>
                                 <Heart className={`w-5 h-5 ${isWished ? 'fill-current' : ''}`} />

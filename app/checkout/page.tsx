@@ -8,6 +8,13 @@ import { useCartStore } from '@/store/useCartStore';
 import { useUserStore } from '@/store/useUserStore';
 import { useOrderStore } from '@/store/useOrderStore';
 import { usePointsStore } from '@/store/usePointsStore';
+import dynamic from 'next/dynamic';
+
+const MapPicker = dynamic(() => import('@/components/MapPicker'), { 
+    ssr: false,
+    loading: () => <div className="h-75 w-full bg-stroke animate-pulse rounded-2xl flex items-center justify-center text-text-sec text-sm font-bold">در حال بارگذاری نقشه...</div>
+});
+
 
 export default function CheckoutPage() {
     const [isMounted, setIsMounted] = useState(false);
@@ -19,16 +26,22 @@ export default function CheckoutPage() {
     const { phone, firstName, lastName } = useUserStore();
     const { addOrder } = useOrderStore();
     const [formData, setFormData] = useState({
-        fullName: firstName || lastName ? `${firstName} ${lastName}`.trim() : '',
-        phone: phone || '',
-        province: '',
-        city: '',
-        address: '',
-        postalCode: ''
-    });
+    fullName: firstName || lastName ? `${firstName} ${lastName}`.trim() : '',
+    phone: phone || '',
+    province: '',
+    city: '',
+    address: '',
+    postalCode: '',
+    lat: 35.6997,
+    lng: 51.3380  
+});
     const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>('standard');
     const { addPoints } = usePointsStore();
     const [earnedPointsDisplay, setEarnedPointsDisplay] = useState(0);
+    
+    const handleLocationSelect = (latlng: number[]) => {
+    setFormData(prev => ({ ...prev, lat: latlng[0], lng: latlng[1] }));
+};
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -139,8 +152,18 @@ const handlePayment = () => {
                                 <input required name="city" value={formData.city} onChange={handleInputChange} type="text" className="w-full bg-secondary border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main" placeholder="مثال: تهران" />
                             </div>
                             <div className="flex flex-col gap-2 md:col-span-2">
-                                <label className="text-sm font-bold text-text-sec">آدرس دقیق <span className="text-red-500">*</span></label>
-                                <textarea required name="address" value={formData.address} onChange={handleInputChange} rows={3} className="w-full bg-secondary border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main resize-none" placeholder="نام خیابان، کوچه، پلاک، واحد..."></textarea>
+                                <label className="text-sm font-bold text-text-sec flex items-center justify-between">
+                                    موقعیت دقیق روی نقشه
+                                    <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-lg">الزامی برای ارسال</span>
+                                </label>
+                                <MapPicker onLocationSelect={handleLocationSelect} />
+                                <span className="text-xs text-text-sec/70 mt-1 dir-ltr text-left">
+                                    Lat: {formData.lat.toFixed(4)} | Lng: {formData.lng.toFixed(4)}
+                                </span>
+                            </div>
+                            <div className="flex flex-col gap-2 md:col-span-2 mt-2">
+                                <label className="text-sm font-bold text-text-sec">آدرس پستی <span className="text-red-500">*</span></label>
+                                <textarea required name="address" value={formData.address} onChange={handleInputChange} rows={3} className="w-full bg-secondary border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main resize-none" placeholder="پلاک، واحد، طبقه و..."></textarea>
                             </div>
                             <div className="flex flex-col gap-2 md:col-span-2">
                                 <label className="text-sm font-bold text-text-sec">کد پستی (اختیاری)</label>

@@ -17,7 +17,7 @@ export default function Error({
 
     return (
         <main className="w-full min-h-[70vh] flex flex-col items-center justify-center p-4 animate-in zoom-in-95 duration-500">
-            <div className="bg-white border border-red-100 rounded-3xl p-8 md:p-12 text-center flex flex-col items-center gap-6 w-full max-w-lg shadow-sm">
+            <div className="bg-secondary border border-red-100 rounded-3xl p-8 md:p-12 text-center flex flex-col items-center gap-6 w-full max-w-lg shadow-sm">
                 <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center border border-red-100">
                     <AlertTriangle className="w-12 h-12 text-red-500 opacity-80" />
                 </div>

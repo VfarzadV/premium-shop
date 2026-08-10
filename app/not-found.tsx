@@ -4,8 +4,8 @@ import { SearchX, ArrowRight } from 'lucide-react';
 export default function NotFound() {
     return (
         <main className="w-full min-h-[70vh] flex flex-col items-center justify-center p-4 animate-in fade-in duration-500">
-            <div className="bg-white border border-stroke rounded-3xl p-8 md:p-12 text-center flex flex-col items-center gap-6 w-full max-w-lg shadow-sm">
-                <div className="w-24 h-24 bg-secondary/30 rounded-full flex items-center justify-center">
+            <div className="bg-secondary border border-stroke rounded-3xl p-8 md:p-12 text-center flex flex-col items-center gap-6 w-full max-w-lg shadow-sm">
+                <div className="w-24 h-24 bg-primary/30 rounded-full flex items-center justify-center">
                     <SearchX className="w-12 h-12 text-primary opacity-80" />
                 </div>
                 <div>
