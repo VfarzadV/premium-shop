@@ -12,6 +12,7 @@ import { Product } from './ProductCard';
 import { useCartStore } from '@/store/useCartStore';
 import { useWishlistStore } from '@/store/useWishlistStore';
 import Swal from 'sweetalert2';
+import { EXCHANGE_RATE } from '@/utils/constants';
 
 export default function SpecialOffersSlider({ products }: { products: Product[] }) {
     const [isMounted, setIsMounted] = useState(false);
@@ -64,9 +65,7 @@ export default function SpecialOffersSlider({ products }: { products: Product[] 
         >
             {products.map((product) => {
                 const isWished = isMounted ? wishlistItems.some(item => item.id === product.id) : false;
-
-                const fakeExchangeRate = 200000;
-                const tomanPrice = product.price * fakeExchangeRate;
+                const tomanPrice = product.price * EXCHANGE_RATE;
                 const oldTomanPrice = Math.round(tomanPrice / (1 - product.discountPercentage / 100));
 
                 return (

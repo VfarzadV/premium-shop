@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Product } from "@/components/ProductCard";
+import { EXCHANGE_RATE } from '@/utils/constants';
 
 export interface CartItem extends Product {
   quantity: number;
@@ -67,8 +68,7 @@ export const useCartStore = create<CartState>()(
       clearCart: () => set({ items: [] }),
       getTotalPrice: () => {
         return get().items.reduce((total, item) => {
-          const fakeExchangeRate = 200000;
-          const tomanPrice = item.price * fakeExchangeRate;
+          const tomanPrice = item.price * EXCHANGE_RATE;
           return total + tomanPrice * item.quantity;
         }, 0);
       },

@@ -8,6 +8,7 @@ import { useCartStore } from '@/store/useCartStore';
 import { useWishlistStore } from '@/store/useWishlistStore';
 import { useCompareStore } from '@/store/useCompareStore';
 import Swal from 'sweetalert2';
+import { EXCHANGE_RATE } from '@/utils/constants';
 
 export interface Product {
     id: number;
@@ -107,8 +108,7 @@ export default function ProductCard({ product }: { product: Product }) {
         }
     };
 
-    const fakeExchangeRate = 200000;
-    const tomanPrice = product.price * fakeExchangeRate;
+    const tomanPrice = product.price * EXCHANGE_RATE;
     const oldTomanPrice = Math.round(tomanPrice / (1 - product.discountPercentage / 100));
 
     const categoryNames: Record<string, string> = {

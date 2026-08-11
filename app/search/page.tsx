@@ -36,9 +36,9 @@ export default async function SearchPage({
 
     return (
         <main className="w-[90%] lg:w-[85%] mx-auto py-8 md:py-12 min-h-screen flex flex-col gap-8">
-            <div className="bg-white rounded-3xl p-6 md:p-8 border border-stroke shadow-sm flex flex-col md:flex-row items-center gap-4 justify-between">
+            <div className="bg-secondary rounded-3xl p-6 md:p-8 border border-stroke shadow-sm flex flex-col md:flex-row items-center gap-4 justify-between">
                 <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 bg-secondary/30 rounded-full flex items-center justify-center text-primary">
+                    <div className="w-14 h-14 bg-primary/30 rounded-full flex items-center justify-center text-primary">
                         <Search className="w-6 h-6" />
                     </div>
                     <div>

@@ -9,6 +9,7 @@ import { useCartStore } from '@/store/useCartStore';
 import { useUserStore } from '@/store/useUserStore';
 import { useCompareStore } from '@/store/useCompareStore';
 import ThemeToggle from './ThemeToggle';
+import { EXCHANGE_RATE } from '@/utils/constants';
 
 interface SearchProduct {
     id: number;
@@ -128,8 +129,7 @@ export default function Navbar() {
                 ) : searchResults.length > 0 ? (
                     <>
                         {searchResults.map(product => {
-                            const fakeExchangeRate = 200000;
-                            const tomanPrice = product.price * fakeExchangeRate;
+                            const tomanPrice = product.price * EXCHANGE_RATE;
                             return (
                                 <Link
                                     href={`/product/${product.id}`}
@@ -330,8 +330,7 @@ export default function Navbar() {
                 <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-bg-main scrollbar-none">
                     {items.length > 0 ? (
                         items.map((item) => {
-                            const fakeExchangeRate = 200000;
-                            const tomanPrice = item.price * fakeExchangeRate;
+                            const tomanPrice = item.price * EXCHANGE_RATE;
                             return (
                                 <div key={item.id} className="flex gap-4 bg-bg-main border border-stroke p-3 rounded-2xl hover:border-primary/30 transition-colors">
                                     <Link href={`/product/${item.id}`} onClick={() => setIsCartOpen(false)} className="relative w-20 h-20 bg-bg-sec dark:bg-zinc-300 rounded-xl shrink-0 p-1">

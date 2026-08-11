@@ -18,6 +18,7 @@ import { useWishlistStore } from '@/store/useWishlistStore';
 import { useCompareStore } from '@/store/useCompareStore';
 import { useCommentStore } from '@/store/useCommentStore';
 import Swal from 'sweetalert2';
+import { EXCHANGE_RATE } from '@/utils/constants';
 
 const mockColors = [
     { id: 'black', hex: '#000000', name: 'مشکی' },
@@ -57,8 +58,7 @@ export default function ProductClient({ product, similarProducts }: { product: P
     const [commentName, setCommentName] = useState('');
     const [commentText, setCommentText] = useState('');
     const [commentRating, setCommentRating] = useState(5);
-    const fakeExchangeRate = 200000;
-    const tomanPrice = product.price * fakeExchangeRate;
+    const tomanPrice = product.price * EXCHANGE_RATE;
     const oldTomanPrice = Math.round(tomanPrice / (1 - product.discountPercentage / 100));
     const addToCart = useCartStore((state) => state.addToCart);
     const addRecent = useRecentStore((state) => state.addRecent);
@@ -364,8 +364,7 @@ export default function ProductClient({ product, similarProducts }: { product: P
                 <div className="w-full">
                     <Swiper dir="rtl" modules={[Navigation]} spaceBetween={16} slidesPerView="auto" navigation className="w-full pb-4">
                         {similarProducts.map((prod) => {
-                            const fakeExchangeRate = 200000;
-                            const tomanPrice = prod.price * fakeExchangeRate;
+                            const tomanPrice = prod.price * EXCHANGE_RATE;
                             return (
                                 <SwiperSlide key={prod.id} className="w-55! md:w-60!">
                                     <div className="w-full bg-bg-main border border-stroke rounded-2xl p-3 flex flex-col group hover:shadow-md hover:border-primary/50 transition-all">

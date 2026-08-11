@@ -12,7 +12,7 @@ export default function Loading() {
             <div className="w-full">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6 mb-8">
                     {skeletonCards.map((_, index) => (
-                        <div key={index} className="bg-white border border-stroke rounded-3xl p-4 flex flex-col shadow-sm">
+                        <div key={index} className="bg-secondary border border-stroke rounded-3xl p-4 flex flex-col shadow-sm">
                             <div className="w-full aspect-square rounded-2xl bg-bg-sec mb-4 animate-pulse"></div>
                             <div className="flex flex-col grow gap-3 animate-pulse">
                                 <div className="flex justify-between items-center">

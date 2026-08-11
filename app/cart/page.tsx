@@ -7,6 +7,7 @@ import {
     ShoppingBag, Trash2, Plus, Minus, ArrowRight, Receipt, ArrowLeft
 } from 'lucide-react';
 import { useCartStore, CartItem } from '@/store/useCartStore';
+import { EXCHANGE_RATE } from '@/utils/constants';
 
 export default function CartPage() {
     const [isMounted, setIsMounted] = useState(false);
@@ -53,7 +54,6 @@ export default function CartPage() {
             </main>
         );
     }
-    const fakeExchangeRate = 200000;
 
     return (
         <main className="w-[90%] lg:w-[85%] mx-auto py-8 md:py-12 min-h-screen">
@@ -75,7 +75,7 @@ export default function CartPage() {
                     </div>
                     <div className="flex flex-col gap-4">
                         {items.map((item: CartItem) => {
-                            const tomanPrice = item.price * fakeExchangeRate;
+                            const tomanPrice = item.price * EXCHANGE_RATE;
                             const totalPriceForItem = tomanPrice * item.quantity;
                             return (
                                 <div key={item.id} className="bg-bg-sec border border-stroke rounded-3xl p-4 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-6 shadow-sm hover:shadow-md transition-shadow">
