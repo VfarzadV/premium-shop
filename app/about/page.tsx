@@ -1,6 +1,12 @@
 import { Store, Users, Target } from 'lucide-react';
 import Link from 'next/link';
 import Worthiness from '@/components/Worthiness';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'درباره ما',
+    description: 'با داستان شکل‌گیری پریمیوم‌شاپ، اهداف و تیم ما بیشتر آشنا شوید.',
+};
 
 export default function AboutPage() {
     return (
@@ -15,9 +21,9 @@ export default function AboutPage() {
                 </p>
             </div>
             <div className="flex flex-col md:flex-row items-center gap-10 lg:gap-16">
-                <div className="w-full md:w-1/2 relative aspect-square md:aspect-[4/3] rounded-3xl overflow-hidden bg-bg-sec border border-stroke animate-in fade-in slide-in-from-right-8 duration-700 delay-150 group">
+                <div className="w-full md:w-1/2 relative aspect-square md:aspect-4/3 rounded-3xl overflow-hidden bg-bg-sec border border-stroke animate-in fade-in slide-in-from-right-8 duration-700 delay-150 group">
                     <div className="absolute inset-0 bg-linear-to-br from-primary/20 via-secondary/20 to-bg-main p-8 flex items-center justify-center transition-transform duration-700 group-hover:scale-105">
-                        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,var(--color-primary)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+                        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,var(--color-primary)_1px,transparent_1px)] bg-size-[20px_20px]"></div>
                         <div className="relative z-10 w-32 h-32 bg-white dark:bg-zinc-800 rounded-full flex items-center justify-center shadow-2xl border border-stroke">
                             <Target className="w-14 h-14 text-primary opacity-90" />
                         </div>

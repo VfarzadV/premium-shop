@@ -1,4 +1,7 @@
-import { DollarSign, ShoppingBag, Users, TrendingUp, Activity } from 'lucide-react';
+"use client";
+
+import { DollarSign, ShoppingBag, Users, TrendingUp } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function AdminDashboard() {
     const stats = [
@@ -6,6 +9,16 @@ export default function AdminDashboard() {
         { id: 2, title: 'سفارشات موفق', value: '۸۴', icon: ShoppingBag, color: 'text-blue-500', bg: 'bg-blue-500/10' },
         { id: 3, title: 'کاربران ثبت‌نامی', value: '۱,۲۵۰', icon: Users, color: 'text-orange-500', bg: 'bg-orange-500/10' },
         { id: 4, title: 'رشد فروش ماهانه', value: '+۲۵٪', icon: TrendingUp, color: 'text-primary', bg: 'bg-primary/10' },
+    ];
+
+    const salesData = [
+        { name: 'شنبه', فروش: 4000000 },
+        { name: 'یکشنبه', فروش: 3000000 },
+        { name: 'دوشنبه', فروش: 5000000 },
+        { name: 'سه‌شنبه', فروش: 2780000 },
+        { name: 'چهارشنبه', فروش: 8900000 },
+        { name: 'پنج‌شنبه', فروش: 6390000 },
+        { name: 'جمعه', فروش: 9490000 },
     ];
 
     return (
@@ -33,14 +46,33 @@ export default function AdminDashboard() {
                 })}
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 bg-bg-sec border border-stroke rounded-3xl p-6 md:p-8 shadow-sm flex flex-col h-80">
+                <div className="lg:col-span-2 bg-bg-sec border border-stroke rounded-3xl p-6 md:p-8 shadow-sm flex flex-col h-100">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="font-black text-lg text-text-main">نمودار فروش ۷ روز اخیر</h2>
                         <button className="text-sm text-primary font-bold hover:underline">گزارش کامل</button>
                     </div>
-                    <div className="flex-1 border-2 border-dashed border-stroke rounded-2xl flex flex-col items-center justify-center text-text-sec gap-3 bg-bg-main/50">
-                        <Activity className="w-10 h-10 opacity-20" />
-                        <span className="text-sm font-medium opacity-50">جایگاه نمودار (در مراحل بعدی اضافه می‌شود)</span>
+                    <div className="flex-1 w-full h-full text-sm font-medium" dir="ltr">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={salesData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
+                                <defs>
+                                    <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#C3936D" stopOpacity={0.3} />
+                                        <stop offset="95%" stopColor="#C3936D" stopOpacity={0} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#9ca3af' }} dy={10} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#9ca3af' }} dx={-10} tickFormatter={(value) => `${value / 1000000}M`} />
+                                <Tooltip
+                                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                    formatter={
+                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                        (value: any) => [`${Number(value).toLocaleString()} تومان`, 'فروش']
+                                    }
+                                />
+                                <Area type="monotone" dataKey="فروش" stroke="#C3936D" strokeWidth={3} fillOpacity={1} fill="url(#colorSales)" />
+                            </AreaChart>
+                        </ResponsiveContainer>
                     </div>
                 </div>
                 <div className="lg:col-span-1 bg-bg-sec border border-stroke rounded-3xl p-6 md:p-8 shadow-sm">
@@ -50,6 +82,7 @@ export default function AdminDashboard() {
                             { text: 'سفارش جدید PSH-1029 ثبت شد', time: '۱۰ دقیقه پیش', color: 'bg-blue-500' },
                             { text: 'موجودی کالای لپ‌تاپ ایسوس به‌روز شد', time: '۲ ساعت پیش', color: 'bg-green-500' },
                             { text: 'کاربر جدید "علی رضایی" ثبت‌نام کرد', time: '۵ ساعت پیش', color: 'bg-orange-500' },
+                            { text: 'سفارش PSH-1028 ارسال شد', time: 'دیروز', color: 'bg-primary' },
                         ].map((activity, idx) => (
                             <div key={idx} className="flex items-start gap-4">
                                 <div className={`w-3 h-3 rounded-full mt-1.5 shrink-0 shadow-sm ${activity.color}`}></div>

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
-import { ShoppingBasket, Search, Menu, X, User, LogIn, Gem, Trash2, Plus, Minus, ArrowLeft, Loader2, ArrowRightLeft } from 'lucide-react';
+import { ShoppingBasket, Search, Menu, X, User, LogIn, Gem, Trash2, Plus, Minus, ArrowLeft, Loader2, ArrowRightLeft, ShieldCheck } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import { useUserStore } from '@/store/useUserStore';
 import { useCompareStore } from '@/store/useCompareStore';
@@ -36,7 +36,7 @@ export default function Navbar() {
     const mobileSearchRef = useRef<HTMLFormElement>(null);
 
     const { items, increaseQuantity, decreaseQuantity, getTotalPrice } = useCartStore();
-    const { phone, firstName, displayName } = useUserStore();
+    const { phone, firstName, displayName, isAdmin } = useUserStore();
     const { compareItems } = useCompareStore();
     const nameToShow = displayName || firstName || '';
 
@@ -205,15 +205,23 @@ export default function Navbar() {
                 </form>
                 <div className="flex items-center gap-2 md:gap-3">
                     <ThemeToggle />
-                    <div className="hidden sm:block">
+                    <div className="hidden sm:flex items-center gap-2">
                         {isMounted ? (
                             phone ? (
-                                <Link href="/profile" className="flex items-center gap-2 bg-secondary/30 px-3 py-2 rounded-xl hover:bg-secondary transition-colors border border-stroke">
-                                    <User className="w-5 h-5 text-primary" />
-                                    <span className="text-sm font-bold text-text-main">
-                                        {nameToShow || 'کاربر مهمان'}
-                                    </span>
-                                </Link>
+                                <>
+                                    {isAdmin && (
+                                        <Link href="/admin" className="flex items-center gap-2 bg-red-500/10 px-3 py-2 rounded-xl hover:bg-red-500 text-red-500 hover:text-white transition-colors border border-red-200">
+                                            <ShieldCheck className="w-5 h-5" />
+                                            <span className="text-sm font-bold">پنل مدیریت</span>
+                                        </Link>
+                                    )}
+                                    <Link href="/profile" className="flex items-center gap-2 bg-secondary/30 px-3 py-2 rounded-xl hover:bg-secondary transition-colors border border-stroke">
+                                        <User className="w-5 h-5 text-primary" />
+                                        <span className="text-sm font-bold text-text-main">
+                                            {nameToShow || 'کاربر مهمان'}
+                                        </span>
+                                    </Link>
+                                </>
                             ) : (
                                 <Link href="/login" className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-xl hover:bg-primary hover:text-white text-primary transition-colors">
                                     <LogIn className="w-5 h-5" />

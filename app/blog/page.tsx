@@ -1,5 +1,11 @@
 import Link from 'next/link';
 import { Eye, ThumbsUp, ArrowLeft, BookOpen } from 'lucide-react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'مجله آموزشی',
+    description: 'جدیدترین مقالات، نقد و بررسی‌ها و اخبار دنیای تکنولوژی و مد را در مجله پریمیوم‌شاپ بخوانید.',
+};
 
 interface Post {
     id: number;

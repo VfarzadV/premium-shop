@@ -7,6 +7,7 @@ interface UserState {
   lastName: string;
   displayName: string;
   email: string;
+  isAdmin: boolean;
   login: (phone: string) => void;
   updateProfile: (data: Partial<UserState>) => void;
   logout: () => void;
@@ -20,7 +21,15 @@ export const useUserStore = create<UserState>()(
       lastName: "",
       displayName: "",
       email: "",
-      login: (phone) => set({ phone }),
+      isAdmin: false,
+
+      login: (phone) => {
+        const isUserAdmin = phone === "09999999999";
+        set({
+          phone,
+          isAdmin: isUserAdmin,
+        });
+      },
       updateProfile: (data) => set((state) => ({ ...state, ...data })),
       logout: () =>
         set({
@@ -29,6 +38,7 @@ export const useUserStore = create<UserState>()(
           lastName: "",
           displayName: "",
           email: "",
+          isAdmin: false,
         }),
     }),
     {

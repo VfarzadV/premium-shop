@@ -26,6 +26,11 @@ export default function ProfilePage() {
     const { items: wishlistItems } = useWishlistStore();
     const { points, redeemPoints } = usePointsStore();
 
+    const [passwords, setPasswords] = useState({
+        current: '',
+        new: '',
+        confirm: '',
+    });
 
     const [formData, setFormData] = useState({
         firstName: firstName || '',
@@ -40,22 +45,83 @@ export default function ProfilePage() {
 
     const handleSaveProfile = (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (passwords.current || passwords.new || passwords.confirm) {
+            if (!passwords.current) {
+                Swal.fire({
+                    title: 'خطا!',
+                    text: 'برای تغییر رمز، ابتدا باید رمز عبور فعلی را وارد کنید.',
+                    icon: 'error',
+                    confirmButtonText: 'متوجه شدم',
+                    confirmButtonColor: '#ef4444',
+                    background: 'var(--color-bg-main)',
+                    color: 'var(--color-text-main)',
+                    customClass: { popup: 'rounded-3xl font-sans border border-stroke', title: 'font-black', confirmButton: 'font-bold rounded-xl px-8 py-3' }
+                });
+                return;
+            }
+            if (passwords.new.length < 8) {
+                Swal.fire({
+                    title: 'رمز عبور ضعیف',
+                    text: 'رمز عبور جدید باید حداقل دارای ۸ کاراکتر باشد.',
+                    icon: 'warning',
+                    confirmButtonText: 'اصلاح می‌کنم',
+                    confirmButtonColor: '#f59e0b',
+                    background: 'var(--color-bg-main)',
+                    color: 'var(--color-text-main)',
+                    customClass: { popup: 'rounded-3xl font-sans border border-stroke', title: 'font-black', confirmButton: 'font-bold rounded-xl px-8 py-3' }
+                });
+                return;
+            }
+            const passwordRegex = /^[a-zA-Z0-9]{8,}$/;
+            if (!passwordRegex.test(passwords.new)) {
+                Swal.fire({
+                    title: 'رمز عبور نامعتبر',
+                    text: 'رمز عبور باید حتماً شامل ترکیبی از حروف انگلیسی و اعداد باشد.',
+                    icon: 'warning',
+                    confirmButtonText: 'اصلاح می‌کنم',
+                    confirmButtonColor: '#f59e0b',
+                    background: 'var(--color-bg-main)',
+                    color: 'var(--color-text-main)',
+                    customClass: { popup: 'rounded-3xl font-sans border border-stroke', title: 'font-black', confirmButton: 'font-bold rounded-xl px-8 py-3' }
+                });
+                return;
+            }
+            if (passwords.new !== passwords.confirm) {
+                Swal.fire({
+                    title: 'عدم تطابق',
+                    text: 'تکرار رمز عبور جدید با خود آن هم‌خوانی ندارد.',
+                    icon: 'error',
+                    confirmButtonText: 'دوباره می‌نویسم',
+                    confirmButtonColor: '#ef4444',
+                    background: 'var(--color-bg-main)',
+                    color: 'var(--color-text-main)',
+                    customClass: { popup: 'rounded-3xl font-sans border border-stroke', title: 'font-black', confirmButton: 'font-bold rounded-xl px-8 py-3' }
+                });
+                return;
+            }
+        }
+
         updateProfile(formData);
+
         Swal.fire({
-            title: 'ثبت موفق!',
-            text: 'اطلاعات حساب کاربری شما با موفقیت به‌روزرسانی شد.',
+            title: 'ذخیره شد!',
+            text: passwords.new ? 'اطلاعات پروفایل و رمز عبور جدید با موفقیت بروزرسانی شد.' : 'اطلاعات پروفایل با موفقیت بروزرسانی شد.',
             icon: 'success',
-            confirmButtonText: 'تایید و بازگشت به صفحه اصلی',
+            confirmButtonText: 'تایید',
             confirmButtonColor: '#6E543D',
             iconColor: '#6E543D',
+            background: 'var(--color-bg-main)',
+            color: 'var(--color-text-main)',
             customClass: {
-                popup: 'rounded-3xl font-sans',
+                popup: 'rounded-3xl font-sans border border-stroke',
                 title: 'font-black text-text-main',
                 htmlContainer: 'text-text-sec text-sm mt-2',
                 confirmButton: 'font-bold rounded-xl px-8 py-3 w-full sm:w-auto',
             }
         }).then((result) => {
             if (result.isConfirmed) {
+                setPasswords({ current: '', new: '', confirm: '' });
                 router.push('/');
             }
         });
@@ -112,11 +178,11 @@ export default function ProfilePage() {
                 confirmButtonText: 'متوجه شدم',
                 confirmButtonColor: '#6E543D',
                 background: 'var(--color-bg-main)',
-                color: 'var(--color-text-main)', 
-                customClass: { 
-                    popup: 'rounded-3xl font-sans border border-stroke', 
-                    title: 'font-black', 
-                    confirmButton: 'font-bold rounded-xl px-8 py-3' 
+                color: 'var(--color-text-main)',
+                customClass: {
+                    popup: 'rounded-3xl font-sans border border-stroke',
+                    title: 'font-black',
+                    confirmButton: 'font-bold rounded-xl px-8 py-3'
                 }
             });
         } else {
@@ -126,15 +192,19 @@ export default function ProfilePage() {
                 icon: 'error',
                 confirmButtonText: 'باشه',
                 confirmButtonColor: '#ef4444',
-                background: 'var(--color-bg-main)', 
+                background: 'var(--color-bg-main)',
                 color: 'var(--color-text-main)',
-                customClass: { 
-                    popup: 'rounded-3xl font-sans border border-stroke', 
-                    title: 'font-black', 
-                    confirmButton: 'font-bold rounded-xl px-8 py-3' 
+                customClass: {
+                    popup: 'rounded-3xl font-sans border border-stroke',
+                    title: 'font-black',
+                    confirmButton: 'font-bold rounded-xl px-8 py-3'
                 }
             });
         }
+    };
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPasswords({ ...passwords, [e.target.name]: e.target.value });
     };
 
     return (
@@ -220,21 +290,45 @@ export default function ProfilePage() {
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">رمز عبور قبلی</label>
                                     <div className="relative">
-                                        <input type="password" dir="ltr" className="w-full bg-secondary border border-stroke rounded-2xl py-3.5 pl-4 pr-11 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main" placeholder="••••••••" />
+                                        <input
+                                            name="current"
+                                            value={passwords.current}
+                                            onChange={handlePasswordChange}
+                                            type="password"
+                                            dir="ltr"
+                                            className="w-full bg-secondary border border-stroke rounded-2xl py-3.5 pl-4 pr-11 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main"
+                                            placeholder="رمز عبور فعلی"
+                                        />
                                         <KeyRound className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-sec/50" />
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">رمز عبور جدید</label>
                                     <div className="relative">
-                                        <input type="password" dir="ltr" className="w-full bg-secondary border border-stroke rounded-2xl py-3.5 pl-4 pr-11 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main" placeholder="••••••••" />
+                                        <input
+                                            name="new"
+                                            value={passwords.new}
+                                            onChange={handlePasswordChange}
+                                            type="password"
+                                            dir="ltr"
+                                            className="w-full bg-secondary border border-stroke rounded-2xl py-3.5 pl-4 pr-11 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main"
+                                            placeholder="رمز عبور جدید"
+                                        />
                                         <KeyRound className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-sec/50" />
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <label className="text-sm font-bold text-text-sec text-right">تکرار رمز جدید</label>
                                     <div className="relative">
-                                        <input type="password" dir="ltr" className="w-full bg-secondary border border-stroke rounded-2xl py-3.5 pl-4 pr-11 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main" placeholder="••••••••" />
+                                        <input
+                                            name="confirm"
+                                            value={passwords.confirm}
+                                            onChange={handlePasswordChange}
+                                            type="password"
+                                            dir="ltr"
+                                            className="w-full bg-secondary border border-stroke rounded-2xl py-3.5 pl-4 pr-11 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-text-main"
+                                            placeholder="تکرار رمز عبور جدید"
+                                        />
                                         <KeyRound className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-sec/50" />
                                     </div>
                                 </div>

@@ -6,10 +6,19 @@ import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
-  title: "Online Shop",
-  description: "Best Online Shop Ever",
+  title: {
+    template: '%s | پریمیوم‌شاپ',
+    default: 'پریمیوم‌شاپ | تجربه یک خرید بی‌نقص',
+  },
+  description: 'بهترین تجربه خرید اینترنتی با تضمین اصالت کالا، پشتیبانی ۲۴ ساعته و ارسال سریع به سراسر کشور در پریمیوم‌شاپ.',
   icons: {
     icon: "/favicon.png",
+  },
+  openGraph: {
+    title: 'پریمیوم‌شاپ | تجربه یک خرید بی‌نقص',
+    description: 'بهترین تجربه خرید اینترنتی با تضمین اصالت کالا، پشتیبانی ۲۴ ساعته و ارسال سریع.',
+    siteName: 'پریمیوم‌شاپ',
+    type: 'website',
   },
 };
 
