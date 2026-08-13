@@ -26,7 +26,7 @@ export default function FilterSidebar() {
     ];
 
     return (
-        <div className="bg-white border border-stroke rounded-3xl p-6 sticky top-28 shadow-sm">
+        <div className="bg-bg-sec border border-stroke rounded-3xl p-6 sticky top-28 shadow-sm">
             <div className="flex items-center gap-2 mb-6 border-b border-stroke pb-4">
                 <SlidersHorizontal className="w-5 h-5 text-primary" />
                 <h2 className="text-lg font-black text-text-main">فیلتر و مرتب‌سازی</h2>
@@ -43,7 +43,7 @@ export default function FilterSidebar() {
                             onClick={() => handleSortChange(option.id)}
                             className={`flex items-center justify-between p-3.5 rounded-xl border transition-all text-sm font-medium outline-none active:scale-95 ${currentSort === option.id
                                     ? 'bg-primary/10 border-primary text-primary shadow-sm'
-                                    : 'bg-bg-sec border-transparent text-text-sec hover:border-stroke hover:bg-white'
+                                    : 'bg-bg-sec border-transparent text-text-sec hover:border-stroke hover:bg-bg-main'
                                 }`}
                         >
                             {option.label}

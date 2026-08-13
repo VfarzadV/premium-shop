@@ -3,7 +3,7 @@ export default function Loading() {
 
     return (
         <main className="w-[90%] lg:w-[85%] mx-auto py-8 md:py-12 min-h-screen">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8 bg-white p-6 rounded-3xl border border-stroke shadow-sm">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8 bg-bg-sec p-6 rounded-3xl border border-stroke shadow-sm">
                 <div className="w-full animate-pulse">
                     <div className="w-48 h-8 bg-stroke rounded-lg mb-3"></div>
                     <div className="w-64 h-4 bg-stroke rounded-md"></div>
@@ -15,7 +15,7 @@ export default function Loading() {
             </div>
             <div className="flex flex-col lg:flex-row gap-8">
                 <aside className="hidden lg:flex flex-col gap-6 w-1/4 shrink-0">
-                    <div className="bg-white border border-stroke rounded-3xl p-6 sticky top-6 shadow-sm animate-pulse h-100">
+                    <div className="bg-bg-sec border border-stroke rounded-3xl p-6 sticky top-6 shadow-sm animate-pulse h-100">
                         <div className="w-1/2 h-6 bg-stroke rounded-lg mb-8"></div>
                         <div className="w-full h-4 bg-stroke rounded-md mb-4"></div>
                         <div className="w-3/4 h-4 bg-stroke rounded-md mb-4"></div>
@@ -28,7 +28,7 @@ export default function Loading() {
                 <div className="w-full lg:w-3/4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6 mb-8">
                         {skeletonCards.map((_, index) => (
-                            <div key={index} className="bg-white border border-stroke rounded-3xl p-4 flex flex-col shadow-sm">
+                            <div key={index} className="bg-bg-sec border border-stroke rounded-3xl p-4 flex flex-col shadow-sm">
                                 <div className="w-full aspect-square rounded-2xl bg-bg-sec mb-4 animate-pulse"></div>
                                 <div className="flex flex-col grow gap-3 animate-pulse">
                                     <div className="flex justify-between items-center">

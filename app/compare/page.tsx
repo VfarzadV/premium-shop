@@ -71,9 +71,9 @@ export default function ComparePage() {
                     <span className="hidden sm:inline">حذف همه</span>
                 </button>
             </div>
-            <div className="bg-bg-sec border border-stroke rounded-3xl shadow-sm overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
-                <div className="overflow-x-auto scrollbar-none">
-                    <table className="w-full text-right min-w-200 border-collapse">
+            <div className="bg-bg-sec border border-stroke rounded-3xl shadow-sm ">
+                <div className="overflow-x-auto ">
+                    <table className="w-full text-right min-w-225 border-collapse">
                         <tbody>
                             <tr>
                                 <th className="p-6 border-b border-l border-stroke bg-bg-main/50 w-48 align-top text-text-sec font-black">

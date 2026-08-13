@@ -25,7 +25,7 @@ export default function Banner() {
           <div className="mt-4 flex justify-center md:justify-start animate-in fade-in slide-in-from-bottom-10 duration-700 delay-500">
             <Link
               href="/shop"
-              className="group flex items-center gap-2 bg-secondary text-primary font-black px-8 py-4 rounded-2xl hover:bg-white hover:shadow-lg hover:shadow-white/20 transition-all duration-300 active:scale-95"
+              className="group flex items-center gap-2 bg-secondary text-primary font-black px-8 py-4 rounded-2xl hover:bg-bg-sec hover:shadow-lg hover:shadow-white/20 transition-all duration-300 active:scale-95"
             >
               مشاهده محصولات
               <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1.5 transition-transform" />

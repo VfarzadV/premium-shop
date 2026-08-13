@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
     ChevronLeft, Star, ShieldCheck, Truck, RotateCcw,
-    Headphones, ShoppingBasket, MessageSquare, Heart, Info, User, ArrowRightLeft
+    Headphones, ShoppingBasket, MessageSquare, Heart, Info, User, ArrowRightLeft, AlertCircle
 } from 'lucide-react';
 import ProductZoom from '@/components/ProductZoom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -171,10 +171,10 @@ export default function ProductClient({ product, similarProducts }: { product: P
                     <div className="relative w-full aspect-square rounded-3xl overflow-hidden">
                         <ProductZoom src={activeImage} alt={product.title} />
                         <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
-                            <button onClick={handleWishlist} className={`w-10 h-10 rounded-full flex items-center justify-center shadow-sm transition-colors ${isWished ? 'bg-red-50 text-red-500 border border-red-200' : 'bg-white text-text-sec hover:text-red-500 border border-stroke'}`}>
+                            <button onClick={handleWishlist} className={`w-10 h-10 rounded-full flex items-center justify-center shadow-sm transition-colors ${isWished ? 'bg-red-50 text-red-500 border border-red-200' : 'bg-bg-main text-text-sec hover:text-red-500 border border-stroke'}`}>
                                 <Heart className={`w-5 h-5 ${isWished ? 'fill-current' : ''}`} />
                             </button>
-                            <button onClick={handleCompare} className={`w-10 h-10 rounded-full flex items-center justify-center shadow-sm transition-colors ${isCompared ? 'bg-primary/10 text-primary border border-primary/30' : 'bg-white text-text-sec hover:text-primary border border-stroke'}`}>
+                            <button onClick={handleCompare} className={`w-10 h-10 rounded-full flex items-center justify-center shadow-sm transition-colors ${isCompared ? 'bg-primary/10 text-primary border border-primary/30' : 'bg-bg-main text-text-sec hover:text-primary border border-stroke'}`}>
                                 <ArrowRightLeft className="w-5 h-5" />
                             </button>
                         </div>
@@ -239,14 +239,42 @@ export default function ProductClient({ product, similarProducts }: { product: P
                                 ))}
                             </div>
                         </div>
-                        <div className="bg-orange-50 text-orange-600 border border-orange-200 rounded-xl p-3 flex items-start gap-2 text-xs leading-relaxed">
+                        <div className="bg-secondary  rounded-xl p-3 flex items-start gap-2 text-xs leading-relaxed">
                             <Info className="w-4 h-4 shrink-0 mt-0.5" />
                             <span>{product.shippingInformation || 'ارسال در سریع‌ترین زمان ممکن'}</span>
                         </div>
-                        <button onClick={(e) => handleAddToCart(e, product)} className="w-full bg-primary text-white font-black py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 active:scale-95">
-                            <ShoppingBasket className="w-5 h-5" />
-                            افزودن به سبد خرید
-                        </button>
+                        <div className="flex flex-col gap-3">
+                            {product.stock > 0 ? (
+                                product.stock <= 10 ? (
+                                    <div className="flex items-center gap-2 text-orange-500 font-bold text-xs bg-orange-500/10 border border-orange-500/20 px-3 py-2.5 rounded-xl w-fit animate-in fade-in">
+                                        <AlertCircle className="w-4 h-4 shrink-0" />
+                                        <span>تنها <span className="text-lg mx-0.5">{product.stock}</span> عدد در انبار باقیست</span>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center gap-2 text-green-500 font-bold text-xs bg-green-500/10 border border-green-500/20 px-3 py-2.5 rounded-xl w-fit">
+                                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                        <span>موجود در انبار</span>
+                                    </div>
+                                )
+                            ) : (
+                                <div className="flex items-center gap-2 text-red-500 font-bold text-xs bg-red-500/10 border border-red-500/20 px-3 py-2.5 rounded-xl w-fit">
+                                    <AlertCircle className="w-4 h-4 shrink-0" />
+                                    <span>ناموجود در انبار</span>
+                                </div>
+                            )}
+                            <button
+                                onClick={(e) => handleAddToCart(e, product)}
+                                disabled={product.stock === 0}
+                                className={`w-full font-black py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95
+                                    ${product.stock > 0
+                                        ? 'bg-primary text-white hover:bg-primary/90 shadow-primary/20'
+                                        : 'bg-bg-main border-2 border-stroke text-text-sec shadow-none cursor-not-allowed active:scale-100 opacity-60'
+                                    }`}
+                            >
+                                <ShoppingBasket className="w-5 h-5" />
+                                {product.stock > 0 ? 'افزودن به سبد خرید' : 'در حال حاضر ناموجود'}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -304,14 +332,14 @@ export default function ProductClient({ product, similarProducts }: { product: P
                                         type="text"
                                         value={commentName}
                                         onChange={(e) => setCommentName(e.target.value)}
-                                        className="w-full bg-white border border-stroke rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-primary/30 text-sm font-medium"
+                                        className="w-full bg-bg-main border border-stroke rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-primary/30 text-sm font-medium"
                                         placeholder="نام و نام خانوادگی"
                                     />
                                     <textarea
                                         rows={4}
                                         value={commentText}
                                         onChange={(e) => setCommentText(e.target.value)}
-                                        className="w-full bg-white border border-stroke rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-primary/30 text-sm font-medium resize-none"
+                                        className="w-full bg-bg-main border border-stroke rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-primary/30 text-sm font-medium resize-none"
                                         placeholder="متن دیدگاه خود را اینجا بنویسید..."
                                     ></textarea>
                                     <div className="flex justify-end">
@@ -324,7 +352,7 @@ export default function ProductClient({ product, similarProducts }: { product: P
                             <div className="flex flex-col gap-4">
                                 {allReviews.length > 0 ? (
                                     allReviews.map((review: Review, idx: number) => (
-                                        <div key={idx} className="bg-white border border-stroke rounded-2xl p-5 flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4">
+                                        <div key={idx} className="bg-bg-main border border-stroke rounded-2xl p-5 flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4">
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-10 h-10 bg-secondary/30 rounded-full flex items-center justify-center text-primary">
@@ -368,7 +396,7 @@ export default function ProductClient({ product, similarProducts }: { product: P
                             return (
                                 <SwiperSlide key={prod.id} className="w-55! md:w-60!">
                                     <div className="w-full bg-bg-main border border-stroke rounded-2xl p-3 flex flex-col group hover:shadow-md hover:border-primary/50 transition-all">
-                                        <Link href={`/product/${prod.id}`} className="relative w-full aspect-square rounded-xl overflow-hidden mb-3 bg-bg-sec flex items-center justify-center p-2 ">
+                                        <Link href={`/product/${prod.id}`} className="relative w-full aspect-square rounded-xl overflow-hidden mb-3 bg-zinc-300 flex items-center justify-center p-2 ">
                                             <Image src={prod.thumbnail} alt={prod.title} fill className="object-contain group-hover:scale-105 transition-transform duration-300 mix-blend-multiply" />
                                         </Link>
                                         <Link href={`/product/${prod.id}`}>

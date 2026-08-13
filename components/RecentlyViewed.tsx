@@ -28,9 +28,18 @@ export default function RecentlyViewed() {
                 </div>
                 <div className="h-px w-full bg-stroke rounded-full"></div>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-5">
-                {displayItems.map((product) => (
-                    <ProductCard key={product.id} product={product} />
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-5">
+                {displayItems.map((product, index) => (
+                    <div
+                        key={product.id}
+                        className={`w-full 
+                            ${index === 4 ? 'hidden xl:block' : ''} 
+                            ${index === 3 ? 'hidden lg:block' : ''} 
+                            ${index === 2 ? 'hidden sm:block' : ''}
+                        `}
+                    >
+                        <ProductCard product={product} />
+                    </div>
                 ))}
             </div>
         </section>

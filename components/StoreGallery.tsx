@@ -26,20 +26,20 @@ export default function StoreGallery() {
                         <ModelViewer path="/models/ps5.glb" scale={0.009} position={[0, 0, 0]} />
                     </div>
                 </div>
-                <div className="flex flex-col gap-6 lg:col-span-1 h-full">
-                    <div className="flex-1 bg-linear-to-bl from-bg-sec to-stroke/30 border border-stroke rounded-3xl p-6 relative overflow-hidden group h-62.5 lg:h-auto">
+                <div className="flex flex-col sm:flex-row lg:flex-col gap-6 lg:col-span-1 h-full">
+                    <div className="flex-1 w-full bg-linear-to-bl from-bg-sec to-stroke/30 border border-stroke rounded-3xl p-6 relative overflow-hidden group h-72 lg:h-auto">
                         <div className="relative z-10 pointer-events-none">
-                            <h3 className="text-xl font-black text-text-main">نایک ایر جردن</h3>
-                            <p className="text-text-sec text-sm mt-1">قدم برداشتن در اوج استایل</p>
+                            <h3 className="text-xl font-black text-text-main">کفش ورزشی</h3>
+                            <p className="text-text-sec text-sm mt-1">مدل‌های جدید و جذاب</p>
                         </div>
                         <div className="absolute inset-0 w-full h-full z-0 translate-y-6">
                             <ModelViewer path="/models/shoes.glb" scale={12} position={[0, 0, 0]} />
                         </div>
                     </div>
-                    <div className="flex-1 bg-linear-to-tr from-bg-sec to-stroke/30 border border-stroke rounded-3xl p-6 relative overflow-hidden group h-62.5 lg:h-auto">
+                    <div className="flex-1 w-full bg-linear-to-tr from-bg-sec to-stroke/30 border border-stroke rounded-3xl p-6 relative overflow-hidden group h-72 lg:h-auto">
                         <div className="relative z-10 pointer-events-none">
-                            <h3 className="text-xl font-black text-text-main">گوشی‌های هوشمند</h3>
-                            <p className="text-text-sec text-sm mt-1">تکنولوژی در دستان شما</p>
+                            <h3 className="text-xl font-black text-text-main">گوشی هوشمند</h3>
+                            <p className="text-text-sec text-sm mt-1">تجربه تکنولوژی برتر</p>
                         </div>
                         <div className="absolute inset-0 w-full h-full z-0 translate-y-6">
                             <ModelViewer path="/models/phone.glb" scale={16} position={[0, 0, 0]} />

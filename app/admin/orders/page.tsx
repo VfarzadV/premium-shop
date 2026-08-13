@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ShoppingBag, Search, Trash2, Eye, CheckCircle } from 'lucide-react';
-import { useOrderStore } from '@/store/useOrderStore';
+import { useOrderStore, Order } from '@/store/useOrderStore';
 import Swal from 'sweetalert2';
 
 export default function AdminOrdersPage() {
@@ -11,31 +11,103 @@ export default function AdminOrdersPage() {
 
     const handleDeleteOrder = (id: string) => {
         Swal.fire({
-            title: 'حذف سفارش؟',
-            text: 'آیا از حذف این سفارش اطمینان دارید؟ این عمل غیرقابل بازگشت است.',
+            title: 'حذف سفارش',
+            text: 'آیا از حذف این سفارش مطمئن هستید؟ (این کار غیرقابل بازگشت است)',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#E9E9E8',
-            confirmButtonText: 'بله، حذف شود',
+            cancelButtonColor: 'var(--color-primary)',
+            confirmButtonText: 'بله، حذف کن',
             cancelButtonText: 'انصراف',
+            background: 'var(--color-bg-main)',
+            color: 'var(--color-text-main)',
             customClass: {
-                popup: 'rounded-3xl font-sans',
-                title: 'font-black text-text-main',
+                popup: 'rounded-3xl font-sans border border-stroke',
+                title: 'font-black',
                 confirmButton: 'font-bold rounded-xl px-6 py-3',
-                cancelButton: 'font-bold rounded-xl px-6 py-3 text-text-main',
+                cancelButton: 'font-bold rounded-xl px-6 py-3 text-text-main border border-stroke hover:bg-stroke/50 transition-colors',
             }
         }).then((result) => {
             if (result.isConfirmed) {
                 removeOrder(id);
                 Swal.fire({
                     title: 'حذف شد!',
-                    text: 'سفارش با موفقیت از سیستم پاک شد.',
+                    text: 'سفارش مورد نظر با موفقیت حذف شد.',
                     icon: 'success',
                     confirmButtonColor: '#6E543D',
+                    background: 'var(--color-bg-main)',
+                    color: 'var(--color-text-main)',
                     customClass: {
-                        popup: 'rounded-3xl font-sans',
-                        title: 'font-black text-text-main',
+                        popup: 'rounded-3xl font-sans border border-stroke',
+                        title: 'font-black',
+                        confirmButton: 'font-bold rounded-xl px-8 py-3',
+                    }
+                });
+            }
+        });
+    };
+
+    const handleViewOrder = (order: Order) => {
+        Swal.fire({
+            title: `جزئیات سفارش ${order.id}`,
+            html: `
+                <div class="flex flex-col gap-3 text-right mt-4 bg-bg-sec p-4 rounded-2xl border border-stroke">
+                    <div class="flex justify-between border-b border-stroke pb-2">
+                        <span class="text-text-sec text-sm">تاریخ ثبت:</span>
+                        <span class="font-bold text-text-main">${order.date}</span>
+                    </div>
+                    <div class="flex justify-between border-b border-stroke pb-2">
+                        <span class="text-text-sec text-sm">تعداد اقلام:</span>
+                        <span class="font-bold text-text-main">${order.items.reduce((acc, item) => acc + item.quantity, 0)} کالا</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-text-sec text-sm">مبلغ پرداخت شده:</span>
+                        <span class="font-black text-primary text-lg">${order.totalPrice.toLocaleString('fa-IR')} تومان</span>
+                    </div>
+                </div>
+            `,
+            confirmButtonText: 'بستن',
+            confirmButtonColor: '#6E543D',
+            background: 'var(--color-bg-main)',
+            color: 'var(--color-text-main)',
+            customClass: {
+                popup: 'rounded-3xl font-sans border border-stroke',
+                title: 'font-black',
+                confirmButton: 'font-bold rounded-xl px-8 py-3 w-full',
+            }
+        });
+    };
+    const handleApproveOrder = (id: string) => {
+        Swal.fire({
+            title: 'تایید و ارسال سفارش',
+            text: `آیا مایلید سفارش ${id} را به وضعیت "تایید شده / در حال ارسال" تغییر دهید؟`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'بله، تایید و ارسال',
+            cancelButtonText: 'انصراف',
+            confirmButtonColor: '#22c55e',
+            cancelButtonColor: 'var(--color-primary)',
+            background: 'var(--color-bg-main)',
+            color: 'var(--color-text-main)',
+            customClass: {
+                popup: 'rounded-3xl font-sans border border-stroke',
+                title: 'font-black',
+                confirmButton: 'font-bold rounded-xl px-6 py-3',
+                cancelButton: 'font-bold rounded-xl px-6 py-3 text-text-main border border-stroke hover:bg-stroke/50 transition-colors',
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'عملیات موفق!',
+                    text: 'پیامک تایید سفارش برای کاربر ارسال شد.',
+                    icon: 'success',
+                    confirmButtonText: 'متوجه شدم',
+                    confirmButtonColor: '#6E543D',
+                    background: 'var(--color-bg-main)',
+                    color: 'var(--color-text-main)',
+                    customClass: {
+                        popup: 'rounded-3xl font-sans border border-stroke',
+                        title: 'font-black',
                         confirmButton: 'font-bold rounded-xl px-8 py-3',
                     }
                 });
@@ -56,13 +128,13 @@ export default function AdminOrdersPage() {
                     </div>
                     <div>
                         <h1 className="text-xl font-black text-text-main">مدیریت سفارشات</h1>
-                        <p className="text-sm text-text-sec mt-1">لیست تمامی خریدهای ثبت‌شده در فروشگاه</p>
+                        <p className="text-sm text-text-sec mt-1">بررسی و پیگیری سفارشات ثبت شده</p>
                     </div>
                 </div>
                 <div className="relative w-full md:w-72">
                     <input
                         type="text"
-                        placeholder="جستجوی شماره سفارش..."
+                        placeholder="جستجوی کد سفارش..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full bg-bg-main border border-stroke rounded-xl py-3 pr-11 pl-4 focus:outline-none focus:border-primary text-sm font-medium transition-colors text-text-main"
@@ -70,15 +142,15 @@ export default function AdminOrdersPage() {
                     <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-sec" />
                 </div>
             </div>
-            <div className="bg-bg-sec border border-stroke rounded-3xl overflow-hidden shadow-sm">
-                <div className="overflow-x-auto scrollbar-none">
+            <div className="bg-bg-sec border border-stroke rounded-3xl shadow-sm">
+                <div className="overflow-x-auto ">
                     <table className="w-full text-right min-w-200">
                         <thead className="bg-bg-main/50 border-b border-stroke">
                             <tr>
-                                <th className="p-5 text-sm font-black text-text-sec">شماره سفارش</th>
+                                <th className="p-5 text-sm font-black text-text-sec">کد سفارش</th>
                                 <th className="p-5 text-sm font-black text-text-sec">تاریخ ثبت</th>
                                 <th className="p-5 text-sm font-black text-text-sec">تعداد اقلام</th>
-                                <th className="p-5 text-sm font-black text-text-sec">مبلغ کل (تومان)</th>
+                                <th className="p-5 text-sm font-black text-text-sec">مبلغ پرداخت شده (تومان)</th>
                                 <th className="p-5 text-sm font-black text-text-sec">وضعیت</th>
                                 <th className="p-5 text-sm font-black text-text-sec text-center">عملیات</th>
                             </tr>
@@ -93,7 +165,7 @@ export default function AdminOrdersPage() {
                                             {order.items.reduce((acc, item) => acc + item.quantity, 0)} کالا
                                         </td>
                                         <td className="p-5 font-black text-primary">
-                                            {order.totalPrice.toLocaleString('fa-IR')} تومان
+                                            {order.totalPrice.toLocaleString('fa-IR')}
                                         </td>
                                         <td className="p-5">
                                             <span className="bg-secondary/30 text-primary text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap">
@@ -102,10 +174,10 @@ export default function AdminOrdersPage() {
                                         </td>
                                         <td className="p-5">
                                             <div className="flex items-center justify-center gap-2 opacity-70 group-hover:opacity-100 transition-opacity">
-                                                <button className="p-2 bg-bg-main border border-stroke rounded-lg text-text-sec hover:text-primary hover:border-primary transition-colors" title="مشاهده جزئیات">
+                                                <button onClick={() => handleViewOrder(order)} className="p-2 bg-bg-main border border-stroke rounded-lg text-text-sec hover:text-primary hover:border-primary transition-colors" title="مشاهده جزئیات">
                                                     <Eye className="w-4 h-4" />
                                                 </button>
-                                                <button className="p-2 bg-bg-main border border-stroke rounded-lg text-text-sec hover:text-green-500 hover:border-green-500 transition-colors" title="تایید و ارسال">
+                                                <button onClick={() => handleApproveOrder(order.id)} className="p-2 bg-bg-main border border-stroke rounded-lg text-text-sec hover:text-green-500 hover:border-green-500 transition-colors" title="تایید و ارسال">
                                                     <CheckCircle className="w-4 h-4" />
                                                 </button>
                                                 <button
@@ -122,7 +194,7 @@ export default function AdminOrdersPage() {
                             ) : (
                                 <tr>
                                     <td colSpan={6} className="p-10 text-center text-text-sec font-bold">
-                                        هیچ سفارشی یافت نشد!
+                                        سفارشی با این مشخصات یافت نشد.
                                     </td>
                                 </tr>
                             )}

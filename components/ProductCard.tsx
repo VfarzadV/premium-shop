@@ -142,7 +142,7 @@ export default function ProductCard({ product }: { product: Product }) {
                         onClick={handleWishlist}
                         className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm active:scale-95 ${isWished
                             ? 'bg-red-50 text-red-500 border border-red-200'
-                            : 'bg-white text-text-sec border border-stroke hover:text-red-500'
+                            : 'bg-bg-main text-text-sec border border-stroke hover:text-red-500'
                             }`}
                         title="افزودن به علاقه‌مندی‌ها"
                     >
@@ -152,7 +152,7 @@ export default function ProductCard({ product }: { product: Product }) {
                         onClick={handleCompare}
                         className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm active:scale-95 ${isCompared
                             ? 'bg-primary/10 text-primary border border-primary/30'
-                            : 'bg-white text-text-sec border border-stroke hover:text-primary'
+                            : 'bg-bg-main text-text-sec border border-stroke hover:text-primary'
                             }`}
                         title="مقایسه محصول"
                     >

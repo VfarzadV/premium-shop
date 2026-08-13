@@ -60,14 +60,14 @@ export default function AdminUsersPage() {
                     <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-sec" />
                 </div>
             </div>
-            <div className="bg-bg-sec border border-stroke rounded-3xl overflow-hidden shadow-sm flex-1">
+            <div className="bg-bg-sec border border-stroke rounded-3xl shadow-sm flex-1">
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-20 gap-4">
                         <div className="w-10 h-10 border-4 border-stroke border-t-primary rounded-full animate-spin"></div>
                         <p className="text-text-sec font-medium">در حال بارگذاری لیست کاربران...</p>
                     </div>
                 ) : (
-                    <div className="overflow-x-auto scrollbar-none">
+                    <div className="overflow-x-auto ">
                         <table className="w-full text-right min-w-225">
                             <thead className="bg-bg-main/50 border-b border-stroke">
                                 <tr>

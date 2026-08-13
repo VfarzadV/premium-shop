@@ -2,7 +2,7 @@ export default function Loading() {
     const skeletonCards = Array(12).fill(0);
     return (
         <main className="w-[90%] lg:w-[85%] mx-auto py-8 md:py-12 min-h-screen flex flex-col gap-8">
-            <div className="bg-white rounded-3xl p-6 md:p-8 border border-stroke shadow-sm flex items-center gap-4 animate-pulse">
+            <div className="bg-bg-sec rounded-3xl p-6 md:p-8 border border-stroke shadow-sm flex items-center gap-4 animate-pulse">
                 <div className="w-14 h-14 bg-stroke rounded-full shrink-0"></div>
                 <div className="flex flex-col gap-3 w-full max-w-md">
                     <div className="w-3/4 h-7 bg-stroke rounded-lg"></div>

@@ -69,7 +69,7 @@ export default function SpecialOffersSlider({ products }: { products: Product[] 
                 const oldTomanPrice = Math.round(tomanPrice / (1 - product.discountPercentage / 100));
 
                 return (
-                    <SwiperSlide key={product.id} className="w-55! md:w-60!">
+                    <SwiperSlide key={product.id} className="w-45! sm:w-50! lg:w-60!">
                         <div className="w-full h-full bg-bg-main rounded-xl p-3 flex flex-col relative group shadow-sm hover:shadow-md transition-shadow border border-stroke hover:border-primary/50">
                             <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full z-10 shadow-sm">
                                 {Math.round(product.discountPercentage)}٪

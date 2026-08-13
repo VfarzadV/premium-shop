@@ -111,7 +111,7 @@ export default function Navbar() {
     }, [isMenuOpen, isCartOpen]);
 
     useEffect(() => {
-        const handleResize = () => { if (window.innerWidth >= 768) setIsMenuOpen(false); };
+        const handleResize = () => { if (window.innerWidth >= 1024) setIsMenuOpen(false); };
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
@@ -170,7 +170,7 @@ export default function Navbar() {
                 <div className="flex items-center gap-4">
                     <button
                         onClick={() => setIsMenuOpen(true)}
-                        className="md:hidden p-2 text-text-main hover:bg-bg-sec rounded-xl transition-colors"
+                        className="lg:hidden p-2 text-text-main hover:bg-bg-sec rounded-xl transition-colors"
                     >
                         <Menu className="w-7 h-7" />
                     </button>
@@ -182,14 +182,14 @@ export default function Navbar() {
                             پریمیوم‌شاپ
                         </span>
                     </Link>
-                    <nav className="hidden md:flex items-center gap-6 mr-8">
+                    <nav className="hidden lg:flex items-center gap-6 mr-8">
                         <Link href="/" className="font-bold text-text-main hover:text-primary transition-colors">خانه</Link>
                         <Link href="/shop" className="font-bold text-text-main hover:text-primary transition-colors">فروشگاه</Link>
                         <Link href="/brands" className="font-bold text-text-main hover:text-primary transition-colors">برندها</Link>
                         <Link href="/blog" className="font-bold text-text-main hover:text-primary transition-colors">مجله</Link>
                     </nav>
                 </div>
-                <form ref={searchRef} onSubmit={handleSearchSubmit} className="hidden md:flex flex-1 max-w-md relative mx-4">
+                <form ref={searchRef} onSubmit={handleSearchSubmit} className="hidden lg:flex flex-1 max-w-md relative mx-4">
                     <input
                         type="text"
                         value={query}
@@ -258,12 +258,9 @@ export default function Navbar() {
                 </div>
             </div>
             {isMenuOpen && (
-                <div
-                    className="fixed inset-0 bg-black/60 z-50 md:hidden backdrop-blur-sm transition-opacity"
-                    onClick={() => setIsMenuOpen(false)}
-                ></div>
+                <div className="fixed inset-0 bg-black/60 z-50 lg:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMenuOpen(false)}></div>
             )}
-            <div className={`fixed top-0 right-0 h-full w-70 sm:w-[320px] bg-bg-main z-50 transform transition-transform duration-300 ease-in-out md:hidden flex flex-col shadow-2xl ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div className={`fixed top-0 right-0 h-full w-70 sm:w-[320px] bg-bg-main z-50 transform transition-transform duration-300 ease-in-out lg:hidden flex flex-col shadow-2xl ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
                 <div className="flex items-center justify-between p-6 border-b border-stroke">
                     <span className="font-black text-xl text-primary">منوی سایت</span>
                     <button onClick={() => setIsMenuOpen(false)} className="p-2 bg-bg-sec text-text-main hover:bg-red-50 hover:text-red-500 rounded-xl transition-colors">
