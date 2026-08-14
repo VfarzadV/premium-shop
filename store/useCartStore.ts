@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Product } from "@/components/ProductCard";
-import { EXCHANGE_RATE } from '@/utils/constants';
+import { EXCHANGE_RATE } from "@/utils/constants";
 
 export interface CartItem extends Product {
   quantity: number;
@@ -27,15 +27,19 @@ export const useCartStore = create<CartState>()(
           (item) => item.id === product.id,
         );
         if (existingItem) {
-          set({
-            items: currentItems.map((item) =>
-              item.id === product.id
-                ? { ...item, quantity: item.quantity + 1 }
-                : item,
-            ),
-          });
+          if (existingItem.quantity < product.stock) {
+            set({
+              items: currentItems.map((item) =>
+                item.id === product.id
+                  ? { ...item, quantity: item.quantity + 1 }
+                  : item,
+              ),
+            });
+          }
         } else {
-          set({ items: [...currentItems, { ...product, quantity: 1 }] });
+          if (product.stock > 0) {
+            set({ items: [...currentItems, { ...product, quantity: 1 }] });
+          }
         }
       },
       removeFromCart: (productId) => {
@@ -44,7 +48,7 @@ export const useCartStore = create<CartState>()(
       increaseQuantity: (productId) => {
         set({
           items: get().items.map((item) =>
-            item.id === productId
+            item.id === productId && item.quantity < item.stock
               ? { ...item, quantity: item.quantity + 1 }
               : item,
           ),

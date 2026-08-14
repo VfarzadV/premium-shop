@@ -19,6 +19,7 @@ export interface Product {
     category: string;
     thumbnail: string;
     brand?: string;
+    stock: number;
 }
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -41,6 +42,7 @@ export default function ProductCard({ product }: { product: Product }) {
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
+        if (product.stock === 0) return;
         addToCart(product);
 
         Swal.fire({
@@ -134,9 +136,15 @@ export default function ProductCard({ product }: { product: Product }) {
     return (
         <div className="bg-bg-sec border border-stroke rounded-3xl p-4 flex flex-col group shadow-sm hover:shadow-xl hover:shadow-secondary/20 hover:border-primary/50 transition-all duration-300">
             <div className="relative w-full aspect-square rounded-2xl overflow-hidden mb-4 bg-bg-sec dark:bg-zinc-300 flex items-center justify-center p-2">
-                <span className="absolute top-3 right-3 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full z-10 shadow-sm">
-                    {Math.round(product.discountPercentage)}٪
-                </span>
+                {product.stock > 0 ? (
+                    <span className="absolute top-3 right-3 bg-red-500 text-white text-xs font-black px-3 py-1.5 rounded-full z-10 shadow-sm">
+                        {Math.round(product.discountPercentage)}%
+                    </span>
+                ) : (
+                    <span className="absolute top-3 right-3 bg-stroke text-text-sec text-xs font-black px-3 py-1.5 rounded-full z-10 shadow-sm">
+                        ناموجود
+                    </span>
+                )}
                 <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
                     <button
                         onClick={handleWishlist}
@@ -185,7 +193,12 @@ export default function ProductCard({ product }: { product: Product }) {
                 <div className="mt-auto pt-4 flex items-end justify-between border-t border-stroke/50">
                     <button
                         onClick={handleAddToCart}
-                        className="bg-bg-sec text-text-sec p-3 rounded-xl hover:bg-primary hover:text-white transition-colors active:scale-95 z-10 relative"
+                        disabled={product.stock === 0}
+                        className={`p-3 rounded-xl transition-colors active:scale-95 z-10 relative ${
+                            product.stock > 0
+                                ? 'bg-bg-sec text-text-sec hover:bg-primary hover:text-white'
+                                : 'bg-bg-main border border-stroke text-text-sec/40 cursor-not-allowed'
+                        }`}
                     >
                         <ShoppingBasket className="w-5 h-5" />
                     </button>

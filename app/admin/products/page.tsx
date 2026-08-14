@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Package, Search, Edit, Trash2, Plus, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
+import { EXCHANGE_RATE } from '@/utils/constants';
 
 interface AdminProduct {
     id: number;
@@ -103,8 +104,8 @@ export default function AdminProductsPage() {
                                             </div>
                                         </td>
                                         <td className="p-5 text-sm font-medium text-text-sec capitalize">{product.category}</td>
-                                        <td className="p-5 font-black text-text-main dir-ltr text-left w-fit">
-                                            ${product.price}
+                                        <td className="p-5 font-black text-text-main text-left w-fit whitespace-nowrap">
+                                            {(product.price * EXCHANGE_RATE).toLocaleString('fa-IR')} تومان
                                         </td>
                                         <td className="p-5">
                                             {product.stock > 10 ? (

@@ -1,13 +1,17 @@
+"use client";
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { LayoutDashboard, ShoppingBag, Package, Users, ArrowRight, LogOut } from 'lucide-react';
 import AdminGuard from '@/components/AdminGuard';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
     const adminNavItems = [
-        { href: '/admin', label: 'داشبورد آماری', icon: LayoutDashboard },
-        { href: '/admin/orders', label: 'مدیریت سفارشات', icon: ShoppingBag },
-        { href: '/admin/products', label: 'موجودی کالاها', icon: Package },
-        { href: '/admin/users', label: 'کاربران ثبت‌نامی', icon: Users },
+        { href: '/admin', label: 'پیشخوان', icon: LayoutDashboard },
+        { href: '/admin/orders', label: 'سفارشات', icon: ShoppingBag },
+        { href: '/admin/products', label: 'محصولات', icon: Package },
+        { href: '/admin/users', label: 'کاربران', icon: Users },
     ];
 
     return (
@@ -18,10 +22,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         <div className="flex items-center justify-between border-b border-stroke pb-6">
                             <div className="flex flex-col">
                                 <span className="font-black text-xl text-primary">پنل مدیریت</span>
-                                <span className="text-xs text-text-sec mt-1">نسخه‌ پیشرفته پریمیوم‌شاپ</span>
+                                <span className="text-xs text-text-sec mt-1">مدیریت فروشگاه پریمیوم</span>
                             </div>
-                            <Link 
-                                href="/" 
+                            <Link
+                                href="/"
                                 className="w-10 h-10 bg-bg-main border border-stroke rounded-xl flex items-center justify-center text-text-sec hover:text-primary hover:border-primary transition-all"
                                 title="بازگشت به سایت"
                             >
@@ -31,13 +35,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         <nav className="flex flex-col gap-2">
                             {adminNavItems.map((item) => {
                                 const Icon = item.icon;
+                                const isActive = pathname === item.href;
                                 return (
                                     <Link
                                         key={item.href}
                                         href={item.href}
-                                        className="flex items-center gap-3 px-4 py-3.5 rounded-2xl font-bold text-sm text-text-sec hover:bg-primary/10 hover:text-primary transition-all group"
+                                        className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl font-bold text-sm transition-all group ${isActive
+                                                ? 'bg-primary text-white shadow-md'
+                                                : 'text-text-sec hover:bg-primary/10 hover:text-primary'
+                                            }`}
                                     >
-                                        <Icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                                        <Icon className={`w-5 h-5 transition-transform ${isActive ? '' : 'group-hover:scale-110'}`} />
                                         <span>{item.label}</span>
                                     </Link>
                                 );

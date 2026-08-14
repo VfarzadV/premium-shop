@@ -50,6 +50,7 @@ export default function Navbar() {
             setIsMenuOpen(false);
             setIsCartOpen(false);
             setShowResults(false);
+            setQuery('');
         }, 0);
         return () => clearTimeout(timer);
     }, [pathname]);

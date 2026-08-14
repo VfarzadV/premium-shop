@@ -8,6 +8,7 @@ import { useCompareStore } from '@/store/useCompareStore';
 import { useCartStore } from '@/store/useCartStore';
 import Swal from 'sweetalert2';
 import { Product } from '@/components/ProductCard';
+import { EXCHANGE_RATE } from '@/utils/constants';
 export default function ComparePage() {
     const [isMounted, setIsMounted] = useState(false);
     const { compareItems, removeFromCompare, clearCompare } = useCompareStore();
@@ -115,7 +116,7 @@ export default function ComparePage() {
                                     <td key={`price-${product.id}`} className="p-6 border-b border-l border-stroke last:border-l-0 bg-white dark:bg-bg-sec text-center">
                                         <div className="flex items-center justify-center gap-1">
                                             <span className="font-black text-lg text-primary tracking-tight">
-                                                {(product.price * 200000).toLocaleString('fa-IR')}
+                                                {(product.price * EXCHANGE_RATE).toLocaleString('fa-IR')}
                                             </span>
                                             <span className="text-xs text-text-sec">تومان</span>
                                         </div>

@@ -3,18 +3,18 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { MapPin, Truck, CreditCard, CheckCircle2, ChevronRight, ShoppingBag, Loader2, Award } from 'lucide-react';
+import { MapPin, Truck, CreditCard, CheckCircle2, ChevronRight, ShoppingBag, Loader2, Award, Ticket } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import { useUserStore } from '@/store/useUserStore';
 import { useOrderStore } from '@/store/useOrderStore';
 import { usePointsStore } from '@/store/usePointsStore';
+import Swal from 'sweetalert2';
 import dynamic from 'next/dynamic';
 
-const MapPicker = dynamic(() => import('@/components/MapPicker'), { 
+const MapPicker = dynamic(() => import('@/components/MapPicker'), {
     ssr: false,
     loading: () => <div className="h-75 w-full bg-stroke animate-pulse rounded-2xl flex items-center justify-center text-text-sec text-sm font-bold">در حال بارگذاری نقشه...</div>
 });
-
 
 export default function CheckoutPage() {
     const [isMounted, setIsMounted] = useState(false);
@@ -25,23 +25,28 @@ export default function CheckoutPage() {
     const { items, getTotalPrice, clearCart } = useCartStore();
     const { phone, firstName, lastName } = useUserStore();
     const { addOrder } = useOrderStore();
-    const [formData, setFormData] = useState({
-    fullName: firstName || lastName ? `${firstName} ${lastName}`.trim() : '',
-    phone: phone || '',
-    province: '',
-    city: '',
-    address: '',
-    postalCode: '',
-    lat: 35.6997,
-    lng: 51.3380  
-});
-    const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>('standard');
     const { addPoints } = usePointsStore();
+
+    const [formData, setFormData] = useState({
+        fullName: firstName || lastName ? `${firstName} ${lastName}`.trim() : '',
+        phone: phone || '',
+        province: '',
+        city: '',
+        address: '',
+        postalCode: '',
+        lat: 35.6997,
+        lng: 51.3380
+    });
+
+    const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>('standard');
     const [earnedPointsDisplay, setEarnedPointsDisplay] = useState(0);
-    
+    const [discountCode, setDiscountCode] = useState('');
+    const [discountAmount, setDiscountAmount] = useState(0);
+    const [isDiscountApplied, setIsDiscountApplied] = useState(false);
+
     const handleLocationSelect = (latlng: number[]) => {
-    setFormData(prev => ({ ...prev, lat: latlng[0], lng: latlng[1] }));
-};
+        setFormData(prev => ({ ...prev, lat: latlng[0], lng: latlng[1] }));
+    };
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -61,8 +66,43 @@ export default function CheckoutPage() {
         e.preventDefault();
         setStep(2);
     };
-
-const handlePayment = () => {
+    const handleApplyDiscount = () => {
+        if (discountCode.trim().toUpperCase().startsWith('PRM-')) {
+            const calculatedDiscount = getTotalPrice() * 0.1;
+            setDiscountAmount(calculatedDiscount);
+            setIsDiscountApplied(true);
+            Swal.fire({
+                title: 'تخفیف اعمال شد!',
+                text: '۱۰٪ تخفیف کلوپ مشتریان روی فاکتور شما اعمال شد.',
+                icon: 'success',
+                confirmButtonColor: '#6E543D',
+                background: 'var(--color-bg-main)',
+                color: 'var(--color-text-main)',
+                customClass: {
+                    popup: 'rounded-3xl font-sans border border-stroke',
+                    title: 'font-black',
+                    confirmButton: 'font-bold rounded-xl px-8 py-3',
+                }
+            });
+        } else {
+            Swal.fire({
+                title: 'کد نامعتبر',
+                text: 'این کد تخفیف وجود ندارد یا منقضی شده است.',
+                icon: 'error',
+                confirmButtonColor: '#ef4444',
+                background: 'var(--color-bg-main)',
+                color: 'var(--color-text-main)',
+                customClass: {
+                    popup: 'rounded-3xl font-sans border border-stroke',
+                    title: 'font-black',
+                    confirmButton: 'font-bold rounded-xl px-8 py-3',
+                }
+            });
+            setDiscountAmount(0);
+            setIsDiscountApplied(false);
+        }
+    };
+    const handlePayment = () => {
         setIsProcessing(true);
         setTimeout(() => {
             setIsProcessing(false);
@@ -73,7 +113,6 @@ const handlePayment = () => {
                 addPoints(points);
                 setEarnedPointsDisplay(points);
             }
-
             addOrder({
                 id: newOrderId,
                 date: new Date().toLocaleDateString('fa-IR'),
@@ -85,12 +124,10 @@ const handlePayment = () => {
             clearCart();
         }, 2000);
     };
-
     if (!isMounted) return null;
     const cartTotal = getTotalPrice();
     const shippingCost = shippingMethod === 'express' ? 50000 : 35000;
-    const finalTotal = cartTotal + shippingCost;
-
+    const finalTotal = cartTotal + shippingCost - discountAmount;
     return (
         <main className="w-[90%] lg:w-[70%] mx-auto py-8 md:py-12 min-h-screen">
             {step !== 3 && (
@@ -107,8 +144,8 @@ const handlePayment = () => {
                     ></div>
                 </div>
                 {[
-                    { num: 1, label: 'اطلاعات ارسال', icon: MapPin },
-                    { num: 2, label: 'پرداخت', icon: CreditCard },
+                    { num: 1, label: 'آدرس و مشخصات', icon: MapPin },
+                    { num: 2, label: 'ارسال و پرداخت', icon: CreditCard },
                     { num: 3, label: 'تکمیل خرید', icon: CheckCircle2 }
                 ].map((s) => {
                     const Icon = s.icon;
@@ -132,12 +169,12 @@ const handlePayment = () => {
                     <form onSubmit={handleNextStep} className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col gap-8">
                         <div className="flex items-center gap-2 border-b border-stroke pb-4">
                             <MapPin className="w-6 h-6 text-primary" />
-                            <h2 className="text-xl font-black text-text-main">آدرس تحویل‌گیرنده</h2>
+                            <h2 className="text-xl font-black text-text-main">مشخصات گیرنده و آدرس</h2>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-text-sec">نام و نام خانوادگی <span className="text-red-500">*</span></label>
-                                <input required name="fullName" value={formData.fullName} onChange={handleInputChange} type="text" className="w-full bg-secondary border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main" placeholder="مثال: فرزاد وطندوست" />
+                                <input required name="fullName" value={formData.fullName} onChange={handleInputChange} type="text" className="w-full bg-secondary border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main" placeholder="نام خود را وارد کنید" />
                             </div>
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-text-sec">شماره موبایل <span className="text-red-500">*</span></label>
@@ -153,8 +190,8 @@ const handlePayment = () => {
                             </div>
                             <div className="flex flex-col gap-2 md:col-span-2">
                                 <label className="text-sm font-bold text-text-sec flex items-center justify-between">
-                                    موقعیت دقیق روی نقشه
-                                    <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-lg">الزامی برای ارسال</span>
+                                    موقعیت روی نقشه
+                                    <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-lg">اختیاری</span>
                                 </label>
                                 <MapPicker onLocationSelect={handleLocationSelect} />
                                 <span className="text-xs text-text-sec/70 mt-1 dir-ltr text-left">
@@ -162,8 +199,8 @@ const handlePayment = () => {
                                 </span>
                             </div>
                             <div className="flex flex-col gap-2 md:col-span-2 mt-2">
-                                <label className="text-sm font-bold text-text-sec">آدرس پستی <span className="text-red-500">*</span></label>
-                                <textarea required name="address" value={formData.address} onChange={handleInputChange} rows={3} className="w-full bg-secondary border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main resize-none" placeholder="پلاک، واحد، طبقه و..."></textarea>
+                                <label className="text-sm font-bold text-text-sec">آدرس دقیق پستی <span className="text-red-500">*</span></label>
+                                <textarea required name="address" value={formData.address} onChange={handleInputChange} rows={3} className="w-full bg-secondary border border-stroke rounded-xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text-main resize-none" placeholder="نام خیابان، کوچه، پلاک، واحد..."></textarea>
                             </div>
                             <div className="flex flex-col gap-2 md:col-span-2">
                                 <label className="text-sm font-bold text-text-sec">کد پستی (اختیاری)</label>
@@ -172,7 +209,7 @@ const handlePayment = () => {
                         </div>
                         <div className="flex justify-end border-t border-stroke pt-6">
                             <button type="submit" className="w-full md:w-auto bg-primary text-white font-black py-4 px-12 rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 active:scale-95">
-                                ثبت و ادامه
+                                تایید و مرحله بعد
                             </button>
                         </div>
                     </form>
@@ -181,15 +218,15 @@ const handlePayment = () => {
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col gap-8">
                         <div className="flex items-center gap-2 border-b border-stroke pb-4">
                             <Truck className="w-6 h-6 text-primary" />
-                            <h2 className="text-xl font-black text-text-main">انتخاب روش ارسال</h2>
+                            <h2 className="text-xl font-black text-text-main">شیوه ارسال و پرداخت</h2>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <label className={`relative flex items-center justify-between p-5 rounded-2xl border-2 cursor-pointer transition-all ${shippingMethod === 'standard' ? 'border-primary bg-primary/5' : 'border-stroke bg-bg-sec hover:border-primary/50'}`}>
                                 <div className="flex items-center gap-3">
                                     <input type="radio" name="shipping" value="standard" checked={shippingMethod === 'standard'} onChange={() => setShippingMethod('standard')} className="w-5 h-5 accent-primary" />
                                     <div className="flex flex-col">
-                                        <span className="font-bold text-text-main">ارسال استاندارد (پست پیشتاز)</span>
-                                        <span className="text-xs text-text-sec mt-1">زمان تحویل: ۳ تا ۵ روز کاری</span>
+                                        <span className="font-bold text-text-main">ارسال عادی (پست پیشتاز)</span>
+                                        <span className="text-xs text-text-sec mt-1">زمان رسیدن: ۳ تا ۵ روز کاری</span>
                                     </div>
                                 </div>
                                 <span className="font-bold text-text-main">۳۵,۰۰۰ <span className="text-[10px] text-text-sec">تومان</span></span>
@@ -198,8 +235,8 @@ const handlePayment = () => {
                                 <div className="flex items-center gap-3">
                                     <input type="radio" name="shipping" value="express" checked={shippingMethod === 'express'} onChange={() => setShippingMethod('express')} className="w-5 h-5 accent-primary" />
                                     <div className="flex flex-col">
-                                        <span className="font-bold text-text-main">ارسال سریع (تیپاکس / پیک)</span>
-                                        <span className="text-xs text-text-sec mt-1">زمان تحویل: ۱ تا ۲ روز کاری</span>
+                                        <span className="font-bold text-text-main">ارسال سریع (پیک ویژه)</span>
+                                        <span className="text-xs text-text-sec mt-1">زمان رسیدن: ۱ تا ۲ روز کاری</span>
                                     </div>
                                 </div>
                                 <span className="font-bold text-text-main">۵۰,۰۰۰ <span className="text-[10px] text-text-sec">تومان</span></span>
@@ -208,8 +245,28 @@ const handlePayment = () => {
                         <div className="bg-bg-sec/50 border border-stroke rounded-2xl p-6 mt-4">
                             <h3 className="font-bold text-text-main mb-4 flex items-center gap-2">
                                 <ShoppingBag className="w-5 h-5 text-primary" />
-                                خلاصه سفارش
+                                خلاصه فاکتور
                             </h3>
+                            <div className="flex items-center gap-2 mb-4 pb-4 border-b border-stroke">
+                                <input
+                                    type="text"
+                                    value={discountCode}
+                                    onChange={(e) => setDiscountCode(e.target.value)}
+                                    disabled={isDiscountApplied}
+                                    dir="ltr"
+                                    placeholder="کد تخفیف (مثال: PRM-1234)"
+                                    className="w-full bg-bg-main border border-stroke rounded-xl py-3 px-4 focus:outline-none focus:border-primary text-sm transition-colors text-text-main disabled:opacity-50 text-left font-bold"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={handleApplyDiscount}
+                                    disabled={!discountCode || isDiscountApplied}
+                                    className="bg-primary text-white px-5 py-3 rounded-xl text-sm font-bold hover:bg-primary/90 disabled:opacity-50 transition-colors shrink-0 flex items-center gap-1"
+                                >
+                                    <Ticket className="w-4 h-4 hidden sm:block" />
+                                    ثبت
+                                </button>
+                            </div>
                             <div className="flex flex-col gap-3 text-sm">
                                 <div className="flex justify-between text-text-sec">
                                     <span>مبلغ کالاها ({items.length} کالا)</span>
@@ -219,6 +276,12 @@ const handlePayment = () => {
                                     <span>هزینه ارسال</span>
                                     <span>{shippingCost.toLocaleString('fa-IR')} تومان</span>
                                 </div>
+                                {isDiscountApplied && (
+                                    <div className="flex justify-between text-green-500 font-bold animate-in fade-in slide-in-from-right-4">
+                                        <span>تخفیف کلوپ مشتریان</span>
+                                        <span>- {discountAmount.toLocaleString('fa-IR')} تومان</span>
+                                    </div>
+                                )}
                                 <hr className="border-stroke my-2" />
                                 <div className="flex justify-between items-center">
                                     <span className="font-bold text-text-main text-base">مبلغ قابل پرداخت</span>
@@ -242,7 +305,7 @@ const handlePayment = () => {
                                     </>
                                 ) : (
                                     <>
-                                        پرداخت امن زرین‌پال
+                                        پرداخت آنلاین و ثبت سفارش
                                         <CreditCard className="w-5 h-5 mr-1" />
                                     </>
                                 )}
@@ -256,26 +319,26 @@ const handlePayment = () => {
                             <CheckCircle2 className="w-12 h-12" />
                         </div>
                         <div>
-                            <h1 className="text-2xl md:text-3xl font-black text-text-main mb-3">پرداخت با موفقیت انجام شد!</h1>
+                            <h1 className="text-2xl md:text-3xl font-black text-text-main mb-3">سفارش شما با موفقیت ثبت شد!</h1>
                             <p className="text-text-sec leading-relaxed max-w-md mx-auto">
-                                سفارش شما با موفقیت ثبت شد و در صف پردازش قرار گرفت. از اینکه پریمیوم‌شاپ را انتخاب کردید سپاسگزاریم.
+                                از خرید شما متشکریم. سفارش شما در حال پردازش است و به زودی ارسال خواهد شد.
                             </p>
                             {earnedPointsDisplay > 0 && (
-                            <div className="bg-linear-to-r from-yellow-500/10 via-orange-500/10 to-yellow-500/10 border border-yellow-500/30 rounded-2xl p-4 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 w-full max-w-sm mt-2 mx-auto">
-                                <div className="w-10 h-10 bg-yellow-500 text-white rounded-full flex items-center justify-center shrink-0 shadow-sm">
-                                    <Award className="w-5 h-5" />
+                                <div className="bg-linear-to-r from-yellow-500/10 via-orange-500/10 to-yellow-500/10 border border-yellow-500/30 rounded-2xl p-4 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 w-full max-w-sm mt-2 mx-auto">
+                                    <div className="w-10 h-10 bg-yellow-500 text-white rounded-full flex items-center justify-center shrink-0 shadow-sm">
+                                        <Award className="w-5 h-5" />
+                                    </div>
+                                    <div className=" text-right">
+                                        <p className="text-sm font-bold text-yellow-700">
+                                            شما <span className="font-black text-lg mx-1">{earnedPointsDisplay}</span> امتیاز کلوپ دریافت کردید!
+                                        </p>
+                                        <p className="text-xs text-yellow-600 mt-0.5">از پنل کاربری برای دریافت کد تخفیف استفاده کنید.</p>
+                                    </div>
                                 </div>
-                                <div className=" text-right">
-                                    <p className="text-sm font-bold text-yellow-700">
-                                        تبریک! شما <span className="font-black text-lg mx-1">{earnedPointsDisplay}</span> امتیاز گرفتید.
-                                    </p>
-                                    <p className="text-xs text-yellow-600 mt-0.5">قابل تبدیل به تخفیف در خریدهای بعدی.</p>
-                                </div>
-                            </div>
-                        )}
+                            )}
                         </div>
                         <div className="bg-bg-sec border border-stroke rounded-2xl p-6 w-full max-w-sm mt-2">
-                            <p className="text-sm text-text-sec mb-2">کد پیگیری سفارش شما:</p>
+                            <p className="text-sm text-text-sec mb-2">کد پیگیری سفارش:</p>
                             <span className="text-2xl font-black tracking-widest text-primary dir-ltr block">{orderId}</span>
                         </div>
                         <div className="flex items-center gap-4 mt-6 w-full max-w-sm">
