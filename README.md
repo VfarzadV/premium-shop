@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛍️ Premium Shop (فروشگاه اینترنتی پریمیوم)
 
-## Getting Started
 
-First, run the development server:
+یک پلتفرم فروشگاهی مدرن، پیشرفته و کاملاً واکنش‌گرا (Responsive) که با استفاده از جدیدترین تکنولوژی‌های دنیای فرانت‌اند توسعه یافته است. این پروژه نمایانگر یک معماری تمیز، مقیاس‌پذیر و اصولی برای اپلیکیشن‌های تجارت الکترونیک (E-commerce) می‌باشد.
 
+---
+
+## ✨ ویژگی‌های کلیدی (Key Features)
+
+* **پنل مدیریت یکپارچه (Admin Dashboard):** مجهز به نمودارهای تحلیلی پویا، مدیریت وضعیت سفارشات، لیست محصولات و کاربران.
+* **کلوپ مشتریان هوشمند:** سیستم امتیازدهی بر اساس خرید و تبدیل خودکار امتیازات به کدهای تخفیف (Discount Codes).
+* **تجربه کاربری بی‌نقص (UI/UX):** استفاده از حالت تاریک و روشن (Dark/Light Mode) با قابلیت تشخیص تم سیستم.
+* **سبد خرید و پرداخت پیشرفته:** مدیریت سبد خرید، محاسبه هزینه ارسال و اعمال داینامیک کدهای تخفیف.
+* **ویترین سه‌بعدی (3D Models):** نمایش تعاملی محصولات با استفاده از مدل‌های سه‌بعدی برای درک بهتر کالا.
+* **مقایسه هوشمند محصولات:** امکان افزودن کالاها به لیست مقایسه و بررسی دقیق مشخصات آن‌ها در کنار هم.
+* **جستجوی زنده (Live Search):** پیشنهاد لحظه‌ای محصولات با قابلیت Debouncing برای جلوگیری از ریکوئست‌های اضافی.
+* **نقشه تعاملی:** امکان انتخاب دقیق لوکیشن ارسال روی نقشه در صفحه پرداخت.
+* **سیستم علاقه‌مندی‌ها و بازدیدهای اخیر:** ذخیره تاریخچه مرور کاربر و پیشنهاد محصولات مشابه.
+
+---
+
+## 🛠️ تکنولوژی‌های استفاده شده (Tech Stack)
+
+این پروژه با بهره‌گیری از یک استک کاملاً مدرن ساخته شده است:
+
+### هسته (Core)
+* **[Next.js](https://nextjs.org/)** (App Router)
+* **[React](https://reactjs.org/)** (v18+)
+* **[TypeScript](https://www.typescriptlang.org/)**
+
+### استایل و رابط کاربری (Styling & UI)
+* **[Tailwind CSS](https://tailwindcss.com/)** (طراحی ریسپانسیو و Mobile-First)
+* **[Lucide React](https://lucide.dev/)** (آیکون‌های وکتور و سبک)
+* **[SweetAlert2](https://sweetalert2.github.io/)** (پاپ‌آپ‌ها و هشدارهای تعاملی)
+* **[Swiper](https://swiperjs.com/)** (اسلایدرهای لمسی و حرفه‌ای)
+
+### مدیریت استیت (State Management)
+* **[Zustand](https://github.com/pmndrs/zustand)** (مدیریت استیت‌های سراسری با قابلیت Persist در LocalStorage)
+
+### ابزارهای جانبی (Tools & Libraries)
+* **[Recharts](https://recharts.org/)** (رندر نمودارهای تحلیلی داشبورد)
+* **[React-Leaflet](https://react-leaflet.js.org/)** (پیاده‌سازی نقشه و انتخاب آدرس)
+* **[React Three Fiber & Drei](https://docs.pmndrs.rs/react-three-fiber/)** (رندر مدل‌های 3D در مرورگر)
+* **DummyJSON** (استفاده به عنوان Fake API برای دریافت اطلاعات محصولات و کاربران)
+
+---
+
+## 🚀 نصب و راه‌اندازی (Installation & Setup)
+
+برای اجرای این پروژه روی سیستم خود، مراحل زیر را به ترتیب دنبال کنید:
+
+**۱. کلون کردن پروژه:**
 ```bash
+git clone [https://github.com/YourUsername/premium-shop.git](https://github.com/YourUsername/premium-shop.git)
+cd premium-shop
+
+۲. نصب وابستگی‌ها:
+با استفاده از npm یا yarn پکیج‌های مورد نیاز را نصب کنید:
+Bash
+
+npm install
+# یا
+yarn install
+
+۳. اجرای سرور توسعه (Development Server):
+Bash
+
 npm run dev
-# or
+# یا
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+پروژه روی آدرس http://localhost:3000 اجرا خواهد شد.
+📂 ساختار پوشه‌ها (Folder Structure)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+معماری این پروژه بر اساس استانداردهای Next.js App Router چیده شده است:
+Plaintext
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+📦 premium-shop
+ ┣ 📂 app              # مسیرها و صفحات اصلی پروژه (روتر)
+ ┃ ┣ 📂 admin          # پنل مدیریت (پیشخوان، سفارشات، محصولات)
+ ┃ ┣ 📂 cart           # صفحه سبد خرید
+ ┃ ┣ 📂 checkout       # مراحل پرداخت و ثبت سفارش
+ ┃ ┣ 📂 compare        # صفحه مقایسه محصولات
+ ┃ ┗ 📂 product        # صفحات پویای جزئیات محصول
+ ┣ 📂 components       # کامپوننت‌های قابل استفاده مجدد (Navbar، ProductCard و...)
+ ┣ 📂 store            # فایل‌های مدیریت استیت Zustand
+ ┣ 📂 public           # فایل‌های استاتیک (فونت‌ها، تصاویر، مدل‌های سه‌بعدی)
+ ┗ 📂 utils            # توابع کاربردی و متغیرهای ثابت (Constants)
 
-## Learn More
+👨‍💻 توسعه‌دهنده (Developer)
 
-To learn more about Next.js, take a look at the following resources:
+توسعه‌یافته با ❤️ توسط فرزاد
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    GitHub Profile
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+(نکته: برای ورود به بخش ادمین در لایو دمو، از شماره موبایل 09999999999 در صفحه ورود استفاده کنید).
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**یک نکته برای دیپلوی (Deploy):**
+برای پروژه‌های Next.js، پلتفرم‌های ابری ایرانی مثل **لیارا (Liara)** یا **پارس‌پک** گزینه‌های بی‌نظیر، سریع و بی‌دردسری هستند که به صورت بومی از
